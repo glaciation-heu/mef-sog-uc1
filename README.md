@@ -1,6 +1,6 @@
 # MEF - SOGEI - UC1
 
-Il caso d'uso UC1 è presentato all'interno del doc: D2.1 provides the GLACIATION platform architecture blueprint together with the service components definition.
+The UC1 use case is presented in the doc: D2.1 provides the GLACIATION platform architecture blueprint together with the service components definition.
 
 ## Component Overview:
 

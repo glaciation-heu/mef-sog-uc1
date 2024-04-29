@@ -69,11 +69,11 @@ The deployment file will take care of installing the volumes, the pod (on worker
 
 ## Test
 
-E' possibile effuttare un test preliminare senza swagger, inserendo i file all'interno del cartella:
+It is possible to carry out a preliminary test without swagger, by inserting the files into the folder:
 
     /home/ubuntu/volume/tm-gla/mef/timbrature/
 
-del nodo worker 101, e eseguendo le chiamate post:
+of worker node 101, and executing the post calls:
 
     curl -X POST http://localhost:30001/scheduled-client/api.noipa.it/sec/workload/V1/startWorkload
     curl -X POST http://localhost:30001/scheduled-client/api.noipa.it/sec/workload/V1/stopWorkload
