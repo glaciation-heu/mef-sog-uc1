@@ -29,7 +29,7 @@
   <li>On Command Prompt #3 you will be able to see the message entered on kafka with the name of the uploaded file.</li>
   <li>If you want to view the actual movement of the file, use Command Prompt #2 to execute the following commands:
 
-    ssh ubuntu@10.14.1.1701 (credenziali sogei1234)
+    ssh ubuntu@10.14.1.1701
     cd /volume/tm-gla/mef/to-be-elaborated/
     ll
 
