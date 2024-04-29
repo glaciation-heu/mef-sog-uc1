@@ -1,0 +1,40 @@
+image:
+  tag: 3.5.1-debian-11-r25
+  pullPolicy: Always
+
+existingLog4jConfigMap: "kafka-log4j-config"
+
+kraft:
+  enabled: false
+
+auth:
+  interBrokerProtocol: plaintext
+
+broker:
+  replicaCount: 3
+  podAntiAffinityPreset: hard
+#  customConfig:
+#    offsetsTopicReplicationFactor: 1
+#    transactionStateLogReplicationFactor: 1
+#    transactionStateLogMinIsr: 1
+
+controller:
+  replicaCount: 0
+
+zookeeper:
+  enabled: true
+  replicaCount: 3
+  podAntiAffinityPreset: hard
+
+listeners:
+  client:
+    protocol: plaintext
+
+  interbroker:
+    protocol: plaintext
+
+  external:
+    protocol: plaintext
+
+externalAccess:
+  enabled: false
