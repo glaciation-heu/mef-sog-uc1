@@ -54,10 +54,10 @@ spec:
           resources:
             requests:
               memory: "10Gi"
-              cpu: 10
+              cpu: 2
             limits:
               memory: "10Gi"
-              cpu: 10
+              cpu: 2
           imagePullPolicy: Never
           ports:
             - containerPort: 8080
