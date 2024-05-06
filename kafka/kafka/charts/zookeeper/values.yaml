@@ -366,6 +366,13 @@ podSecurityContext:
 containerSecurityContext:
   enabled: true
   seLinuxOptions: {}
+  resources: 
+    limits:
+      cpu: 10
+      memory: 16Gi
+    requests: 
+      cpu: 10
+      memory: 16Gi
   runAsUser: 1001
   runAsGroup: 1001
   runAsNonRoot: true

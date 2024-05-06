@@ -51,6 +51,13 @@ spec:
       containers:
         - name: scheduled-client
           image: scheduled-client:latest
+          resources:
+            requests:
+              memory: "10Gi"
+              cpu: 10
+            limits:
+              memory: "10Gi"
+              cpu: 10
           imagePullPolicy: Never
           ports:
             - containerPort: 8080
