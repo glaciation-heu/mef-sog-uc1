@@ -5,9 +5,10 @@ The UC1 use case is presented in the doc: D2.1 provides the GLACIATION platform 
 ## Component Overview:
 
 - **Description**: Distributed Knowledge Graph refers to the Novel Metadata Fabric of the GLACIATION platform, contains a Use Case with 3 components as follows:
-* [Metric-Server component on K8S](./metric-server/README.md)
 * [Kafka component](./kafka/README.md)
+* [Metric-Server component on K8S](./metric-server/README.md)
 * [scheduled-client component](./scheduled-client/README.md)
+* [Test File](./file-timbrature/README.md)
 
 ## Service Dependencies:
 For each component, there will be separate ```.md``` file under the ```docs``` folder of each service describing its dependencies.
