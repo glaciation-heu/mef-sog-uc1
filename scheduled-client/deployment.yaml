@@ -53,11 +53,11 @@ spec:
           image: scheduled-client:latest
           resources:
             requests:
-              memory: "10Gi"
-              cpu: 2
+              memory: "2Gi"
+              cpu: 1
             limits:
-              memory: "10Gi"
-              cpu: 2
+              memory: "2Gi"
+              cpu: 1
           imagePullPolicy: Never
           ports:
             - containerPort: 8080

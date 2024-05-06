@@ -1023,11 +1023,11 @@ broker:
   ##
   resources:
     requests:
-      cpu: 2
-      memory: 6Gi
+      cpu: 1
+      memory: 2Gi
     limits:
-      cpu: 2
-      memory: 6Gi
+      cpu: 1
+      memory: 2Gi
   ## Kafka pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param broker.podSecurityContext.enabled Enable security context for the pods
