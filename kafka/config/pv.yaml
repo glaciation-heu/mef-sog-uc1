@@ -12,6 +12,15 @@ spec:
     - ReadWriteOnce
   local:
     path: /home/ubuntu/volume/tm-gla/kafka/kafka-zk-0
+  #TODO
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - fun-krill
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -26,6 +35,15 @@ spec:
     - ReadWriteOnce
   local:
     path: /home/ubuntu/volume/tm-gla/kafka/kafka-broker-0
+  #TODO
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - exotic-weevil
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -40,6 +58,15 @@ spec:
     - ReadWriteOnce
   local:
     path: /home/ubuntu/volume/tm-gla/kafka/kafka-zk-1
+  #TODO: 
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - crisp-leech
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -54,6 +81,15 @@ spec:
     - ReadWriteOnce
   local:
     path: /home/ubuntu/volume/tm-gla/kafka/kafka-broker-1
+  #TODO
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - cosmic-bull
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -68,6 +104,15 @@ spec:
     - ReadWriteOnce
   local:
     path: /home/ubuntu/volume/tm-gla/kafka/kafka-zk-2
+  #TODO
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - braine-head-node
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -82,6 +127,15 @@ spec:
     - ReadWriteOnce
   local:
     path: /home/ubuntu/volume/tm-gla/kafka/kafka-broker-2
+  #TODO
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - alert-boxer
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
