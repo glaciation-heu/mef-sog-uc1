@@ -3,7 +3,6 @@ kind: PersistentVolume
 metadata:
   name: data-mef-pv
 spec:
-  type: ext4
   capacity:
     storage: 10Gi
   volumeMode: Filesystem
