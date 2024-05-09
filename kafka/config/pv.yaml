@@ -82,7 +82,7 @@ spec:
   resources:
     requests:
       storage: 8Gi
-  storageClassName: fast
+  storageClassName: standard-rwo
   # volumeName: data-kafka-broker-0
 ---
 apiVersion: v1
@@ -96,7 +96,7 @@ spec:
   resources:
     requests:
       storage: 8Gi
-  storageClassName: fast
+  storageClassName: standard-rwo
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -109,7 +109,7 @@ spec:
   resources:
     requests:
       storage: 8Gi
-  storageClassName: fast
+  storageClassName: standard-rwo
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -122,7 +122,7 @@ spec:
   resources:
     requests:
       storage: 10Gi
-  storageClassName: fast
+  storageClassName: standard-rwo
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -135,7 +135,7 @@ spec:
   resources:
     requests:
       storage: 10Gi
-  storageClassName: fast
+  storageClassName: standard-rwo
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -148,4 +148,4 @@ spec:
   resources:
     requests:
       storage: 10Gi
-  storageClassName: fast
+  storageClassName: standard-rwo
