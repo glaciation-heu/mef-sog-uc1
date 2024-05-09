@@ -6,19 +6,9 @@ spec:
   capacity:
     storage: 10Gi
   volumeMode: Filesystem
-  storageClassName: local-path
+  storageClassName: standard
   accessModes:
     - ReadWriteOnce
-  local:
-    path: /home/ubuntu/volume/tm-gla/mef
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: kubernetes.io/hostname
-              operator: In
-              values:
-                - glaciation-sogei-worker101
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -30,7 +20,7 @@ spec:
   resources:
     requests:
       storage: 10Gi
-  storageClassName: local-path
+  storageClassName: standard
   volumeName: data-mef-pv
 ---
 apiVersion: apps/v1
