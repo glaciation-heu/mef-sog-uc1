@@ -3,10 +3,11 @@ kind: PersistentVolume
 metadata:
   name: data-mef-pv
 spec:
+  type: ext4
   capacity:
     storage: 10Gi
   volumeMode: Filesystem
-  storageClassName: standard
+  storageClassName: longhorn
   accessModes:
     - ReadWriteOnce
 ---
@@ -20,7 +21,7 @@ spec:
   resources:
     requests:
       storage: 10Gi
-  storageClassName: standard
+  storageClassName: longhorn
   volumeName: data-mef-pv
 ---
 apiVersion: apps/v1
