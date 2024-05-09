@@ -21,7 +21,6 @@ spec:
     requests:
       storage: 10Gi
   storageClassName: longhorn
-  volumeName: data-mef-pv
 ---
 apiVersion: apps/v1
 kind: Deployment
