@@ -95,54 +95,8 @@ spec:
   volumeMode: Filesystem
 ```
 
-In case you are just testing this for POC purposes and do not have access to an NFS drive, you can utilize a hostPath. However, it is not a good practice to use hostPaths for a live environment as it has many security risks. Here is an example of creating a PV using hostPath in cluster with 1 knot:
-
+In case you are only testing this for POC purposes and don't have access to an NFS drive, you can use a cloud storage like Longhorn:
 ```yaml
-# Sample HostPath based PV
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: data-kafka-zookeeper-0
-spec:
-  capacity:
-    storage: 10Gi
-  volumeMode: Filesystem
-  storageClassName: local-path
-  accessModes:
-    - ReadWriteOnce
-  local:
-    path: /home/ubuntu/volume/tm-gla/kafka/kafka-zk-0
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: kubernetes.io/hostname
-              operator: In
-              values:
-                - <host-work-n>
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: data-kafka-broker-0
-spec:
-  capacity:
-    storage: 8Gi
-  volumeMode: Filesystem
-  storageClassName: local-path
-  accessModes:
-    - ReadWriteOnce
-  local:
-    path: /home/ubuntu/volume/tm-gla/kafka/kafka-broker-0
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: kubernetes.io/hostname
-              operator: In
-              values:
-                - <host-work-n>
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -154,9 +108,8 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 8Gi
-  storageClassName: local-path
-  volumeName: data-kafka-broker-0
+      storage: 2Gi
+  storageClassName: longhorn
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -168,9 +121,8 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 10Gi
-  storageClassName: local-path
-  volumeName: data-kafka-zookeeper-0
+      storage: 5Gi
+  storageClassName: longhorn
 ```
 Create a PersistentVolume and a PersistentVolumeClaim for each broker and zookeeper pod on each worker node by substituting the node name for <host-work-n>.
 

@@ -18,31 +18,9 @@ Import 'scheduled-client.tar' into your local kubernetes repository:
 
 ## Persistent Volumes (PV)
 
-Modify the PersistentVolume section of the 'deployment.yaml' file by declaring the name of the <host-work> node on which the pod will be running, create the /home/ubuntu/volume/tm-gla/mef folder on the corresponding node.
+Longhorn is used as cloud storage:
 
 ```yaml
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: data-mef-pv
-spec:
-  capacity:
-    storage: 10Gi
-  volumeMode: Filesystem
-  storageClassName: local-path
-  accessModes:
-    - ReadWriteOnce
-  local:
-    path: /home/ubuntu/volume/tm-gla/mef
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: kubernetes.io/hostname
-              operator: In
-              values:
-                - <host-work>
----
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -53,8 +31,7 @@ spec:
   resources:
     requests:
       storage: 10Gi
-  storageClassName: local-path
-  volumeName: data-mef-pv
+  storageClassName: longhorn
 ```
 
 ## Install

@@ -8,7 +8,7 @@ The UC1 use case is presented in the doc: D2.1 provides the GLACIATION platform 
 * [LongHorn](./longhorn/README.md)
 * [Kafka component](./kafka/README.md)
 * [Metric-Server component on K8S](./metric-server/README.md)
-* [scheduled-client component](./scheduled-client/README.md)
+* [Scheduled-client component](./scheduled-client/README.md)
 * [Test File](./file-timbrature/README.md)
 
 ## Service Dependencies:
