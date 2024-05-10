@@ -1,135 +1,75 @@
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: data-kafka-zookeeper-0
-spec:
-  capacity:
-    storage: 10Gi
-  volumeMode: Filesystem
-  storageClassName: local-path
-  accessModes:
-    - ReadWriteOnce
-  local:
-    path: /home/ubuntu/volume/tm-gla/kafka/kafka-zk-0
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: kubernetes.io/hostname
-              operator: In
-              values:
-                - glaciation-sogei-worker101
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: data-kafka-broker-0
-spec:
-  capacity:
-    storage: 8Gi
-  volumeMode: Filesystem
-  storageClassName: local-path
-  accessModes:
-    - ReadWriteOnce
-  local:
-    path: /home/ubuntu/volume/tm-gla/kafka/kafka-broker-0
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: kubernetes.io/hostname
-              operator: In
-              values:
-                - glaciation-sogei-worker101
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: data-kafka-zookeeper-1
-spec:
-  capacity:
-    storage: 10Gi
-  volumeMode: Filesystem
-  storageClassName: local-path
-  accessModes:
-    - ReadWriteOnce
-  local:
-    path: /home/ubuntu/volume/tm-gla/kafka/kafka-zk-1
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: kubernetes.io/hostname
-              operator: In
-              values:
-                - glaciation-sogei-worker102
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: data-kafka-broker-1
-spec:
-  capacity:
-    storage: 8Gi
-  volumeMode: Filesystem
-  storageClassName: local-path
-  accessModes:
-    - ReadWriteOnce
-  local:
-    path: /home/ubuntu/volume/tm-gla/kafka/kafka-broker-1
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: kubernetes.io/hostname
-              operator: In
-              values:
-                - glaciation-sogei-worker102
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: data-kafka-zookeeper-2
-spec:
-  capacity:
-    storage: 10Gi
-  volumeMode: Filesystem
-  storageClassName: local-path
-  accessModes:
-    - ReadWriteOnce
-  local:
-    path: /home/ubuntu/volume/tm-gla/kafka/kafka-zk-2
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: kubernetes.io/hostname
-              operator: In
-              values:
-                - glaciation-sogei-worker103
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: data-kafka-broker-2
-spec:
-  capacity:
-    storage: 8Gi
-  volumeMode: Filesystem
-  storageClassName: local-path
-  accessModes:
-    - ReadWriteOnce
-  local:
-    path: /home/ubuntu/volume/tm-gla/kafka/kafka-broker-2
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: kubernetes.io/hostname
-              operator: In
-              values:
-                - glaciation-sogei-worker103
+# ---
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: data-kafka-zookeeper-0
+# spec:
+#   capacity:
+#     storage: 10Gi
+#   volumeMode: Filesystem
+#   storageClassName: standard
+#   accessModes:
+#     - ReadWriteOnce
+# ---
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: data-kafka-broker-0
+# spec:
+#   capacity:
+#     storage: 8Gi
+#   volumeMode: Filesystem
+#   storageClassName: standard
+#   accessModes:
+#     - ReadWriteOnce
+# ---
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: data-kafka-zookeeper-1
+# spec:
+#   capacity:
+#     storage: 10Gi
+#   volumeMode: Filesystem
+#   storageClassName: standard
+#   accessModes:
+#     - ReadWriteOnce
+# ---
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: data-kafka-broker-1
+# spec:
+#   capacity:
+#     storage: 8Gi
+#   volumeMode: Filesystem
+#   storageClassName: standard
+#   accessModes:
+#     - ReadWriteOnce
+# ---
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: data-kafka-zookeeper-2
+# spec:
+#   capacity:
+#     storage: 10Gi
+#   volumeMode: Filesystem
+#   storageClassName: standard
+#   accessModes:
+#     - ReadWriteOnce
+# ---
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: data-kafka-broker-2
+# spec:
+#   capacity:
+#     storage: 8Gi
+#   volumeMode: Filesystem
+#   storageClassName: standard
+#   accessModes:
+#     - ReadWriteOnce
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -142,8 +82,7 @@ spec:
   resources:
     requests:
       storage: 8Gi
-  storageClassName: local-path
-  volumeName: data-kafka-broker-0
+  storageClassName: longhorn
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -156,8 +95,7 @@ spec:
   resources:
     requests:
       storage: 8Gi
-  storageClassName: local-path
-  volumeName: data-kafka-broker-1
+  storageClassName: longhorn
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -170,8 +108,7 @@ spec:
   resources:
     requests:
       storage: 8Gi
-  storageClassName: local-path
-  volumeName: data-kafka-broker-2
+  storageClassName: longhorn
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -184,8 +121,7 @@ spec:
   resources:
     requests:
       storage: 10Gi
-  storageClassName: local-path
-  volumeName: data-kafka-zookeeper-0
+  storageClassName: longhorn
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -198,8 +134,7 @@ spec:
   resources:
     requests:
       storage: 10Gi
-  storageClassName: local-path
-  volumeName: data-kafka-zookeeper-1
+  storageClassName: longhorn
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -212,5 +147,4 @@ spec:
   resources:
     requests:
       storage: 10Gi
-  storageClassName: local-path
-  volumeName: data-kafka-zookeeper-2
+  storageClassName: longhorn

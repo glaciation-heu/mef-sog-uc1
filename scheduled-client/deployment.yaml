@@ -1,25 +1,15 @@
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: data-mef-pv
-spec:
-  capacity:
-    storage: 10Gi
-  volumeMode: Filesystem
-  storageClassName: local-path
-  accessModes:
-    - ReadWriteOnce
-  local:
-    path: /home/ubuntu/volume/tm-gla/mef
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: kubernetes.io/hostname
-              operator: In
-              values:
-                - glaciation-sogei-worker101
----
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: data-mef-pv
+# spec:
+#   capacity:
+#     storage: 10Gi
+#   volumeMode: Filesystem
+#   storageClassName: longhorn
+#   accessModes:
+#     - ReadWriteOnce
+# ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -30,8 +20,7 @@ spec:
   resources:
     requests:
       storage: 10Gi
-  storageClassName: local-path
-  volumeName: data-mef-pv
+  storageClassName: longhorn
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -51,6 +40,13 @@ spec:
       containers:
         - name: scheduled-client
           image: scheduled-client:latest
+          resources:
+            requests:
+              memory: "2Gi"
+              cpu: 1
+            limits:
+              memory: "2Gi"
+              cpu: 1
           imagePullPolicy: Never
           ports:
             - containerPort: 8080
@@ -68,7 +64,7 @@ spec:
             - name: PATH_TIMESTAMPS_TO-BE-ELABORATED
               value: "/MEF/file/to-be-elaborated"
             - name: FIXEDRATE_WATCHING_FOLDER_SECONDS
-              value: "30"
+              value: "1"
           volumeMounts:
             - name: data-mef
               mountPath: /MEF/file/
