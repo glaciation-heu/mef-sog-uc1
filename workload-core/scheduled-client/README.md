@@ -5,7 +5,7 @@
 The main objective is to create the image starting from the source code (scheduled-client folder). Copy the scheduled-client folder to a node where you have operational docker and position yourself inside the folder, then build the image:
 
     cd ../../scheduled-client
-    sudo docker build -t scheduled-client:latest .
+    sudo docker build -t scheduled-client:1.0.0 .
 
 Export the image:
 
