@@ -1,0 +1,152 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: data-mef-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: longhorn
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scheduled-client-deployment
+  namespace: tm-gla
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scheduled-client
+  template:
+    metadata:
+      labels:
+        app: scheduled-client
+    spec:
+      containers:
+        - name: scheduled-client
+          image: scheduled-client:latest
+          resources:
+            requests:
+              memory: "2Gi"
+              cpu: "1"
+            limits:
+              memory: "2Gi"
+              cpu: "1"
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_KAFKA_ENABLED
+              value: "true"
+            - name: SPRING_KAFKA_PRODUCER_BOOTSTRAP-SERVERS
+              value: kafka.kafka.svc.cluster.local:9092
+            - name: SPRING_KAFKA_PRODUCER_TOPIC
+              value: test
+            - name: SPRING_SERVLET_MULTIPART_MAX-FILE-SIZE
+              value: "500MB"
+            - name: PATH_TIMESTAMPS
+              value: "/MEF/file/timbrature"
+            - name: PATH_TIMESTAMPS_TO-BE-ELABORATED
+              value: "/MEF/file/to-be-elaborated"
+            - name: FIXEDRATE_WATCHING_FOLDER_SECONDS
+              value: "1"
+          volumeMounts:
+            - name: data-mef
+              mountPath: /MEF/file/
+      volumes:
+        - name: data-mef
+          persistentVolumeClaim:
+            claimName: data-mef-pvc
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: scheduled-client-entrypoint
+  namespace: tm-gla
+spec:
+  type: NodePort
+  selector:
+    app: scheduled-client
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30001
+      protocol: TCP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elaboration-timb-ms-deployment
+  namespace: tm-gla
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: elaboration-timb-ms
+  template:
+    metadata:
+      labels:
+        app: elaboration-timb-ms
+    spec:
+      containers:
+        - name: elaboration-timb-ms
+          image: elaboration-timb-ms:1.0.0
+          resources:
+            requests:
+              memory: "2Gi"
+              cpu: "1"
+            limits:
+              memory: "2Gi"
+              cpu: "1"
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+          env:
+            - name: H2_CONSOLE
+              value: "false"
+            - name: LOG_LEVEL_JPA
+              value: "true"
+            - name: SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS
+              value: kafka.kafka.svc.cluster.local:9092
+            - name: SPRING_KAFKA_LISTENER_TOPIC
+              value: test
+            - name: PATH_TIMESTAMPS_ELABORATED
+              value: "/MEF/file/elaborated"
+            - name: PATH_TIMESTAMPS_ACQUIRED
+              value: "/MEF/file/completed"
+            - name: PATH_TIMESTAMPS_DISCARDED
+              value: "/MEF/file/discarded"
+            - name: PATH_METRICS
+              value: "/MEF/metrics"
+          volumeMounts:
+            - name: data-mef
+              mountPath: /MEF/file/
+      volumes:
+        - name: data-mef
+          persistentVolumeClaim:
+            claimName: data-mef-pvc
+      restartPolicy: Always
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: elaboration-timb-ms-autoscaling
+  namespace: tm-gla
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: elaboration-timb-ms-deployment
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 60

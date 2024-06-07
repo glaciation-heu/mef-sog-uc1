@@ -1,0 +1,45 @@
+spring:
+    application:
+        name: elaboration-timb-ms
+    datasource:
+        driver-class-name: org.h2.Driver
+        password: ${SPRING_DATASOURCE_PASSWORD:gla_passw}
+        url: jdbc:h2:mem:mydb
+        username: ${SPRING_DATASOURCE_USERNAME:gla_usr}
+    h2:
+        console:
+            enabled: ${H2_CONSOLE:true}
+            path: /h2-console
+            settings.trace: false
+            settings.web-allow-others: false
+    jpa:
+        database-platform: org.hibernate.dialect.H2Dialect
+        defer-datasource-initialization: true
+        properties.hibernate.format_sql: ${LOG_LEVEL_JPA:true}
+        show-sql: ${LOG_LEVEL_JPA:true}
+    kafka:
+        consumer:
+            bootstrap-servers: ${SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS:${spring.embedded.kafka.brokers}}
+            group-id: ${SPRING_KAFKA_CONSUMER_GROUP-ID:tm-gla}
+        listener:
+            topic: ${SPRING_KAFKA_LISTENER_TOPIC:timbrature}
+server:
+    port: 8081
+    servlet:
+        context-path: /elaboration-timb-ms
+path:
+    timbrature.elaborated: ${PATH_TIMESTAMPS_ELABORATED:C:\MEF\file\elaborated}
+    timbrature.completed: ${PATH_TIMESTAMPS_ACQUIRED:C:\MEF\file\completed}
+    timbrature.discarded: ${PATH_TIMESTAMPS_DISCARDED:C:\MEF\file\discarded}
+    metrics: ${PATH_METRICS:C:\MEF\file\metrics}
+    
+    
+management:
+    endpoints:
+        web:
+            exposure:
+                include:
+                  - prometheus
+                  - health
+                  - info
+                  - metric
