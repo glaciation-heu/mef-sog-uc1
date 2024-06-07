@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import it.mef.tm.scheduled.client.kafka.KafkaProducerService;
+import it.mef.tm.scheduled.client.model.ElaborazioneModel;
 import it.mef.tm.scheduled.client.util.StringUtility;
-import it.mef.tm.scheduled.client.util.model.ElaborazioneModel;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -37,9 +37,8 @@ public class TaskService {
 	@Value("${path.timbrature.to-be-elaborated}")
 	private String pathTimbratureToBeElaborated;
     
-    public void executeTask() throws IOException {
+    public void executeTask() {
 		log.info("Process started");
-		Files.createDirectories(Paths.get(pathTimbrature));
     	File[] listFiles = Paths.get(pathTimbrature).toFile().listFiles();
     	for (File file : listFiles) {
 			moveFileWithKafka(file);
@@ -52,8 +51,7 @@ public class TaskService {
 	 * @param file
 	 * @throws Exception
 	 */
-	private void moveFileWithKafka(File file) throws IOException {
-		Files.createDirectories(Paths.get(pathTimbratureToBeElaborated));
+	private void moveFileWithKafka(File file) {
 		if (file.isFile()) {
 			ElaborazioneModel elabModel = new ElaborazioneModel();
 			// Sposto il file

@@ -1,4 +1,4 @@
-package it.mef.tm.scheduled.client.util.model;
+package it.mef.tm.scheduled.client.model;
 
 import java.io.Serializable;
 

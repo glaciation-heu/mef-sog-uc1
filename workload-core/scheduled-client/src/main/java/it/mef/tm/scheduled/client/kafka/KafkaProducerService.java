@@ -12,8 +12,8 @@ import org.springframework.util.concurrent.ListenableFuture;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.mef.tm.scheduled.client.exception.BusinessServiceException;
+import it.mef.tm.scheduled.client.model.ElaborazioneModel;
 import it.mef.tm.scheduled.client.util.StringUtility;
-import it.mef.tm.scheduled.client.util.model.ElaborazioneModel;
 import lombok.extern.slf4j.Slf4j;
 
 /**

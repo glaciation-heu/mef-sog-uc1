@@ -3,12 +3,9 @@ package it.mef.tm.scheduled.client.kafka;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
@@ -36,20 +33,11 @@ public class KafkaProducerConfig {
 	@Value("${spring.kafka.producer.topic}")
 	private String topic;
 	
-	@Value("${spring.kafka.enabled}")
-	private String kafkaEnabled;
-	
-	@PostConstruct
-	public void init() {
-		log.info(StringUtility.concat("Kafka enabled? ", kafkaEnabled));
-	}
-	
 	/**
 	 * Instanza del bean producerFactory
 	 * @return
 	 */
     @Bean
-    @ConditionalOnProperty(prefix = "spring.kafka",  value ="enabled", havingValue = "true", matchIfMissing = false)
     public ProducerFactory<String, String> producerFactory() {
     	
     	log.info(StringUtility.concat("Kafka producer attesting to broker urls: ", bootstrapAddress));
@@ -69,7 +57,6 @@ public class KafkaProducerConfig {
      * @return
      */
     @Bean
-    @ConditionalOnProperty(prefix = "spring.kafka",  value ="enabled", havingValue = "true", matchIfMissing = false)
     public KafkaTemplate<String, String> kafkaTemplate() {
     	KafkaTemplate<String, String> kafkaTemplate = new KafkaTemplate<>(producerFactory());
     	// Setto il topic di default

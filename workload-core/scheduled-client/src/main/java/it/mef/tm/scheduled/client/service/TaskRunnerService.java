@@ -3,8 +3,6 @@ package it.mef.tm.scheduled.client.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-
 /**
  * TaskRunnerService.java
  * 
@@ -22,12 +20,6 @@ public class TaskRunnerService {
     
     public Runnable runTask() {
 
-    	return () -> {
-            try {
-                taskService.executeTask();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        };
+    	return () -> taskService.executeTask();
     }
 }
