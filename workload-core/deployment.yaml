@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
         - name: scheduled-client
-          image: scheduled-client:latest
+          image: scheduled-client:1.0.0
           resources:
             requests:
               memory: "2Gi"
@@ -55,7 +55,7 @@ spec:
               value: "1"
           volumeMounts:
             - name: data-mef
-              mountPath: /MEF/file/
+              mountPath: /MEF/
       volumes:
         - name: data-mef
           persistentVolumeClaim:
@@ -109,7 +109,7 @@ spec:
             - name: H2_CONSOLE
               value: "false"
             - name: LOG_LEVEL_JPA
-              value: "true"
+              value: "false"
             - name: SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS
               value: kafka.kafka.svc.cluster.local:9092
             - name: SPRING_KAFKA_LISTENER_TOPIC
@@ -122,9 +122,11 @@ spec:
               value: "/MEF/file/discarded"
             - name: PATH_METRICS
               value: "/MEF/metrics"
+            - name: SPRING_KAFKA_CONSUMER_MAX-POLL-RECORDS
+              value: "1"
           volumeMounts:
             - name: data-mef
-              mountPath: /MEF/file/
+              mountPath: /MEF/
       volumes:
         - name: data-mef
           persistentVolumeClaim:
@@ -142,7 +144,7 @@ spec:
     kind: Deployment
     name: elaboration-timb-ms-deployment
   minReplicas: 1
-  maxReplicas: 3
+  maxReplicas: 4
   metrics:
     - type: Resource
       resource:
@@ -150,3 +152,23 @@ spec:
         target:
           type: Utilization
           averageUtilization: 60
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 60
+      policies:
+        - type: Pods
+          value: 4
+          periodSeconds: 60
+        - type: Percent
+          value: 10
+          periodSeconds: 60
+    scaleUp:
+      stabilizationWindowSeconds: 5
+      policies:
+        - type: Percent
+          value: 100
+          periodSeconds: 15
+        - type: Pods
+          value: 4
+          periodSeconds: 15
+      selectPolicy: Max

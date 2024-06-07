@@ -9,7 +9,7 @@ The main objective is to create the image starting from the source code (schedul
 
 Export the image:
 
-    sudo docker save -o ./scheduled-client.tar scheduled-client
+    sudo docker save -o ./scheduled-client.tar scheduled-client:1.0.0
 
 Copy 'scheduled-client.tar' to the worker node where you plan to create the pod. In our specific case the chosen node will be worker-101.
 Import 'scheduled-client.tar' into your local kubernetes repository:
