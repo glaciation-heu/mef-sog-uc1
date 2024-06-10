@@ -37,7 +37,7 @@ public class KafkaListenerService {
 	 * @param message
 	 */
 	@ConditionalOnProperty(value = "kafka.enabled", havingValue = "true", matchIfMissing = true)
-	@KafkaListener(topics = "${spring.kafka.listener.topic}", groupId = "${spring.kafka.consumer.group-id}", autoStartup = "${spring.kafka.listener.auto-start:true}", concurrency = "${spring.kafka.listener.concurrency:3}")
+	@KafkaListener(topics = "${spring.kafka.listener.topic}", groupId = "${spring.kafka.consumer.group-id}", autoStartup = "${spring.kafka.listener.auto-start:true}", concurrency = "${spring.kafka.listener.concurrency}")
 	public void consume(ConsumerRecord<String, String> message) {
 		ElaborazioneModel response = null;
 		
