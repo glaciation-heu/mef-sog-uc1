@@ -21,6 +21,9 @@ spring:
         consumer:
             bootstrap-servers: ${SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS:${spring.embedded.kafka.brokers}}
             group-id: ${SPRING_KAFKA_CONSUMER_GROUP-ID:tm-gla}
+            max-poll-records: ${SPRING_KAFKA_CONSUMER_MAX-POLL-RECORDS:1}
+            properties:
+                max-poll-interval-ms: ${SPRING_KAFKA_CONSUMER_MAX-POLL-INTERVAL-MS:60000}
         listener:
             topic: ${SPRING_KAFKA_LISTENER_TOPIC:timbrature}
 server:

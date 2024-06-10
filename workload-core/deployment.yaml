@@ -124,6 +124,8 @@ spec:
               value: "/MEF/metrics"
             - name: SPRING_KAFKA_CONSUMER_MAX-POLL-RECORDS
               value: "1"
+            - name: SPRING_KAFKA_CONSUMER_MAX-POLL-INTERVAL-MS
+              value: "60000"
           volumeMounts:
             - name: data-mef
               mountPath: /MEF/
