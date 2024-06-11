@@ -1,23 +1,19 @@
 package it.mef.tm.elaboration.timb.kafka;
 
-import java.io.IOException;
-import java.nio.file.Paths;
-
-import javax.xml.bind.JAXBException;
-
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.micrometer.core.instrument.util.StringUtils;
+import it.mef.tm.elaboration.timb.model.ElaborazioneModel;
+import it.mef.tm.elaboration.timb.service.LetturaTimbratureService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.annotation.KafkaListener;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import io.micrometer.core.instrument.util.StringUtils;
-import it.mef.tm.elaboration.timb.model.ElaborazioneModel;
-import it.mef.tm.elaboration.timb.service.LetturaTimbratureService;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.kafka.support.Acknowledgment;
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
+import java.nio.file.Paths;
 
 /**
  * KafkaListenerService.java
@@ -39,7 +35,7 @@ public class KafkaListenerService {
 	 */
 	@ConditionalOnProperty(value = "kafka.enabled", havingValue = "true", matchIfMissing = true)
 	@KafkaListener(topics = "${spring.kafka.listener.topic}", groupId = "${spring.kafka.consumer.group-id}", autoStartup = "${spring.kafka.listener.auto-start:true}", concurrency = "${spring.kafka.listener.concurrency}")
-	public void consume(ConsumerRecord<String, String> message, Acknowledgment acknowledgment) {
+	public void consume(ConsumerRecord<String, String> message) {
 		ElaborazioneModel response = null;
 		
 		try {
@@ -48,7 +44,7 @@ public class KafkaListenerService {
 			ObjectMapper objMapper = new ObjectMapper();
 			response = objMapper.readValue(message.value(), new TypeReference<ElaborazioneModel>(){});
 
-			processKafkaMessage(response, acknowledgment);
+			processKafkaMessage(response);
 		} catch (Throwable t) {
 			log.error(String.format("Processing encountered a error: %s", t.getMessage()), t);
 		}
@@ -57,10 +53,9 @@ public class KafkaListenerService {
 	/**
 	 * Metodo che processa il messaggio di ritorno da kafka
 	 * @param response
-	 * @param message
 	 * @throws JAXBException 
 	 */
-	protected void processKafkaMessage(ElaborazioneModel response, Acknowledgment acknowledgment) throws JAXBException {
+	protected void processKafkaMessage(ElaborazioneModel response) throws JAXBException {
 		
 		if (StringUtils.isEmpty(response.getPathToFile())) {
 			log.error("Kafka received message error: PathToFile not defined!");
@@ -76,7 +71,6 @@ public class KafkaListenerService {
 		
 		try {
 			letturaTimbratureService.letturaFornitura(response.getPathToFile());
-			acknowledgment.acknowledge();
 		} catch (JAXBException | IOException e) {
 			log.error("Error in time stamps elaboration for file {}: Errore writing XML!", response.getPathToFile(), e);
 		}

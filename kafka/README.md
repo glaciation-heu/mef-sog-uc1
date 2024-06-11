@@ -256,6 +256,8 @@ Topic:
     kafka-topics.sh --list --bootstrap-server kafka.kafka.svc.cluster.local:9092
     kafka-topics.sh --alter --bootstrap-server kafka.kafka.svc.cluster.local:9092 --topic test --replication-factor 1
 
+    kafka-topics.sh --bootstrap-server kafka.kafka.svc.cluster.local:9092 --alter --topic test --partitions 12
+
 Test Producer:
     
     kafka-console-producer.sh --broker-list kafka.kafka.svc.cluster.local:9092 --topic test
