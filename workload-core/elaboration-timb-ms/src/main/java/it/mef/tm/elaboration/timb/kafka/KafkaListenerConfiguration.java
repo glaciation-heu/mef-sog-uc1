@@ -37,7 +37,7 @@ public class KafkaListenerConfiguration {
     @Value(value = "${spring.kafka.consumer.group-id}")
     private String groupId;
 
-    @Value(value = "${spring.kafka.consumer.max.poll.records}")
+    @Value(value = "${spring.kafka.consumer.max-poll-records}")
     private String maxPoolRecords;
 
     @Value(value = "${spring.kafka.consumer.properties.max-poll-interval-ms}")
