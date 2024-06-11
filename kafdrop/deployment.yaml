@@ -23,6 +23,8 @@ spec:
           env:
             - name: KAFKA_BROKERCONNECT
               value: "kafka.kafka.svc.cluster.local:9092"
+            - name: SERVER_SERVLET_CONTEXTPATH
+              value: "/kafdrop"
 
 ---
 apiVersion: v1
