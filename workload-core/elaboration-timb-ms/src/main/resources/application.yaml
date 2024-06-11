@@ -21,12 +21,17 @@ spring:
         consumer:
             bootstrap-servers: ${SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS:${spring.embedded.kafka.brokers}}
             group-id: ${SPRING_KAFKA_CONSUMER_GROUP-ID:tm-gla}
+            auto-offset-reset: earliest
             max-poll-records: ${SPRING_KAFKA_CONSUMER_MAX-POLL-RECORDS:500}
             properties:
                 max-poll-interval-ms: ${SPRING_KAFKA_CONSUMER_MAX-POLL-INTERVAL-MS:300000}
+                spring:
+                    json:
+                        add.type.headers: false
         listener:
             topic: ${SPRING_KAFKA_LISTENER_TOPIC:timbrature}
             concurrency: ${SPRING_KAFKA_LISTENER_CONCURRENCY:1}
+            partitions: ${SPRING_KAFKA_LISTENER_PARTITIONS:1}
 server:
     port: 8081
     servlet:

@@ -17,6 +17,7 @@ import io.micrometer.core.instrument.util.StringUtils;
 import it.mef.tm.elaboration.timb.model.ElaborazioneModel;
 import it.mef.tm.elaboration.timb.service.LetturaTimbratureService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.support.Acknowledgment;
 
 /**
  * KafkaListenerService.java
@@ -38,7 +39,7 @@ public class KafkaListenerService {
 	 */
 	@ConditionalOnProperty(value = "kafka.enabled", havingValue = "true", matchIfMissing = true)
 	@KafkaListener(topics = "${spring.kafka.listener.topic}", groupId = "${spring.kafka.consumer.group-id}", autoStartup = "${spring.kafka.listener.auto-start:true}", concurrency = "${spring.kafka.listener.concurrency}")
-	public void consume(ConsumerRecord<String, String> message) {
+	public void consume(ConsumerRecord<String, String> message, Acknowledgment acknowledgment) {
 		ElaborazioneModel response = null;
 		
 		try {
@@ -47,7 +48,7 @@ public class KafkaListenerService {
 			ObjectMapper objMapper = new ObjectMapper();
 			response = objMapper.readValue(message.value(), new TypeReference<ElaborazioneModel>(){});
 
-			processKafkaMessage(response);
+			processKafkaMessage(response, acknowledgment);
 		} catch (Throwable t) {
 			log.error(String.format("Processing encountered a error: %s", t.getMessage()), t);
 		}
@@ -59,7 +60,7 @@ public class KafkaListenerService {
 	 * @param message
 	 * @throws JAXBException 
 	 */
-	protected void processKafkaMessage(ElaborazioneModel response) throws JAXBException {
+	protected void processKafkaMessage(ElaborazioneModel response, Acknowledgment acknowledgment) throws JAXBException {
 		
 		if (StringUtils.isEmpty(response.getPathToFile())) {
 			log.error("Kafka received message error: PathToFile not defined!");
@@ -75,6 +76,7 @@ public class KafkaListenerService {
 		
 		try {
 			letturaTimbratureService.letturaFornitura(response.getPathToFile());
+			acknowledgment.acknowledge();
 		} catch (JAXBException | IOException e) {
 			log.error("Error in time stamps elaboration for file {}: Errore writing XML!", response.getPathToFile(), e);
 		}
