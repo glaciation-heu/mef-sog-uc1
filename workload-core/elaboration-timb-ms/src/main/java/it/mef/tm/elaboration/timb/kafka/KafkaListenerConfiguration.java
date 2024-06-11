@@ -37,6 +37,13 @@ public class KafkaListenerConfiguration {
     @Value(value = "${spring.kafka.consumer.group-id}")
     private String groupId;
 
+    @Value(value = "${spring.kafka.consumer.max.poll.records}")
+    private String maxPoolRecords;
+
+    @Value(value = "${spring.kafka.consumer.properties.max-poll-interval-ms}")
+    private String maxPoolIntervalRecords;
+
+
     @Bean
     public KafkaListenerService kafkaListenerService() {
         log.info("Kafka consumer service linked to broker urls: " + bootstrapAddress);
@@ -48,13 +55,14 @@ public class KafkaListenerConfiguration {
         return new DefaultKafkaConsumerFactory<>(consumerConfigs());
     }
 
-    @Bean
     public Map<String, Object> consumerConfigs() {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, maxPoolRecords);
+        props.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, maxPoolIntervalRecords);
         return props;
     }
 
@@ -64,4 +72,5 @@ public class KafkaListenerConfiguration {
         factory.setConsumerFactory(consumerFactory());
         return factory;
     }
+
 }
