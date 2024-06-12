@@ -39,7 +39,7 @@ public class KafkaListenerService {
 		ElaborazioneModel response = null;
 		
 		try {
-			log.info("$$ -> Kafka message received -> {}", message.value());
+            log.info("$$ -> Kafka message received in partition {} -> {}", message.partition(), message.value());
 
 			ObjectMapper objMapper = new ObjectMapper();
 			response = objMapper.readValue(message.value(), new TypeReference<ElaborazioneModel>(){});
@@ -74,5 +74,6 @@ public class KafkaListenerService {
 		} catch (JAXBException | IOException e) {
 			log.error("Error in time stamps elaboration for file {}: Errore writing XML!", response.getPathToFile(), e);
 		}
+        log.info("$$ -> Elaboration terminated: {}", response.getPathToFile());
 	}
 }

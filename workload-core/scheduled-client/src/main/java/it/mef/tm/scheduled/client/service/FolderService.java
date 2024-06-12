@@ -1,5 +1,6 @@
 package it.mef.tm.scheduled.client.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+
+import it.mef.tm.scheduled.client.util.StringUtility;
 
 /**
  * FolderService.java
@@ -32,6 +35,7 @@ public class FolderService {
 
     	Files.createDirectories(Paths.get(pathTimbrature));
     	Files.createDirectories(Paths.get(pathTimbratureToBeElaborated));
+    	Files.createDirectories(Paths.get(StringUtility.concat(pathTimbrature, File.separator, "massive")));
 	}
 
 }

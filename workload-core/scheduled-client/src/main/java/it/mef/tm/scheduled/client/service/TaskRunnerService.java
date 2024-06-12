@@ -22,4 +22,9 @@ public class TaskRunnerService {
 
     	return () -> taskService.executeTask();
     }
+
+    public Runnable runMassiveTask() {
+
+    	return () -> taskService.executeMassiveTask();
+    }
 }

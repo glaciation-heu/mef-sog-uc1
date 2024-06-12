@@ -1,6 +1,7 @@
 package it.mef.tm.scheduled.client.controller;
 
 
+import static it.mef.tm.scheduled.client.costants.Costants.FORMAT_DATE;
 import static it.mef.tm.scheduled.client.costants.Costants.SISTEMA_PROTOCOLLO_HTTP;
 import static it.mef.tm.scheduled.client.costants.Costants.TYPE_API_OPERATION;
 import static it.mef.tm.scheduled.client.costants.Costants.URL_BASE;
@@ -40,8 +41,6 @@ public class FileTimestampsController {
 	@Value("${path.timbrature}")
 	private String pathTimbrature;
 	
-	private static final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyyMMddHHmmss");
-	
 	/**
 	 * Servizio per il caricamento di un file timbrature
 	 * @param file
@@ -50,8 +49,8 @@ public class FileTimestampsController {
 	 */
 	@ApiOperation(value = TYPE_API_OPERATION, notes = "Upload of Timestamps File")
 	@PostMapping(value = URL_SERVIZI_GFT_UPLOAD_FILE, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public Boolean uploadFile(@ApiParam(value = "File di upload", required = true) @RequestPart("file") MultipartFile file) throws PreconditionException {
-		String pathFinale = StringUtility.concat(pathTimbrature, File.separator, FORMAT.format(new Date()), "-", file.getOriginalFilename());
+	public Boolean uploadFile(@ApiParam(value = "File di upload", required = true) @RequestPart(name="file", required = true) MultipartFile file) throws PreconditionException {
+		String pathFinale = StringUtility.concat(pathTimbrature, File.separator, new SimpleDateFormat(FORMAT_DATE).format(new Date()), "-", file.getOriginalFilename());
 		try {
 			Files.write(Paths.get(pathFinale), file.getBytes(), StandardOpenOption.CREATE_NEW);
 		} catch(IOException ex) {
