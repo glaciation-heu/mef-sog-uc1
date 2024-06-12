@@ -1,0 +1,16 @@
+grafana:
+  enabled: true
+  grafana.ini:
+    server:
+      domain: 10.14.1.170:8081
+      root_url: "%(protocol)s://%(domain)s/grafana"
+      serve_from_sub_path: true
+
+kubeEtcd:
+  service:
+    port: 2381
+    targetPort: 2381
+
+prometheus:
+  service:
+    type: NodePort #30090
