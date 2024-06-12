@@ -14,3 +14,7 @@ To access our components and manage routes we install an Nginx reverse proxy. Wi
 Use docker compose to install the Nginx container:
     
     sudo docker-compose up -d
+
+## Reference
+
+https://grafana.com/tutorials/run-grafana-behind-a-proxy/
