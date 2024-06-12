@@ -20,6 +20,7 @@ public enum ErrorCode {
 	ERRSCH01("ERRSCH01", "Workload Already Stopped", null), // schedulazione in corso
 	ERRSCH02("ERRSCH02", "Workload Already Started", null), // schedulazione già annullata o non presente
 	TMGFT33("TMGFT33", "Error during writing file", null),
+	ERRSCH03("ERRSCH03", "Not a zip file", null),
 	UNEXPECTED("5000", "Internal Server Error", null),
 	NULL_POINTER("NP-1000", "Null Pointer Exception", NullPointerException.class),
 	ILLEGAL_ARGUMENT("IA-1000", "Illegal Argument Exception", IllegalArgumentException.class),
