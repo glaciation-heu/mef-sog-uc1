@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
         - name: scheduled-client
-          image: scheduled-client:1.0.0
+          image: scheduled-client:1.0.3
           resources:
             requests:
               memory: "2Gi"
@@ -84,7 +84,7 @@ metadata:
   name: elaboration-timb-ms-deployment
   namespace: tm-gla
 spec:
-  replicas: 4
+#  replicas: 4
   selector:
     matchLabels:
       app: elaboration-timb-ms
@@ -95,7 +95,7 @@ spec:
     spec:
       containers:
         - name: elaboration-timb-ms
-          image: elaboration-timb-ms:1.0.5
+          image: elaboration-timb-ms:1.0.6
           resources:
             requests:
               memory: "2Gi"
@@ -180,30 +180,30 @@ spec:
 #          periodSeconds: 15
 #      selectPolicy: Max
 ---
-#apiVersion: keda.sh/v1alpha1
-#kind: ScaledObject
-#metadata:
-#  name: elaboration-timb-ms-scaled
-#  namespace: tm-gla
-#spec:
-#  scaleTargetRef:
-#    name: elaboration-timb-ms-deployment
-#  cooldownPeriod: 30
-#  maxReplicaCount:  4
-#  advanced:
-#    horizontalPodAutoscalerConfig:
-#      behavior:
-#        scaleDown:
-#          stabilizationWindowSeconds: 300
-#          policies:
-#            - type: Percent
-#              value: 50
-#              periodSeconds: 30
-#  triggers: # (5)
-#    - type: kafka
-#      metadata:
-#        bootstrapServers: kafka.kafka.svc.cluster.local:9092
-#        consumerGroup: tm-gla
-#        topic: test
-#        lagThreshold: '6'
-#        offsetResetPolicy: earliest
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: elaboration-timb-ms-scaled
+  namespace: tm-gla
+spec:
+  scaleTargetRef:
+    name: elaboration-timb-ms-deployment
+  cooldownPeriod: 600
+  maxReplicaCount:  4
+  advanced:
+    horizontalPodAutoscalerConfig:
+      behavior:
+        scaleDown:
+          stabilizationWindowSeconds: 600
+          policies:
+            - type: Percent
+              value: 50
+              periodSeconds: 30
+  triggers:
+    - type: kafka
+      metadata:
+        bootstrapServers: kafka.kafka.svc.cluster.local:9092
+        consumerGroup: tm-gla
+        topic: test
+        lagThreshold: '6'
+        offsetResetPolicy: earliest
