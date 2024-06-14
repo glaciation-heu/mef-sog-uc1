@@ -9,17 +9,14 @@ import static it.mef.tm.scheduled.client.costants.Costants.URL_SERVIZI_GFT_MASS_
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.concurrent.ScheduledFuture;
-import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,8 +29,6 @@ import org.springframework.web.multipart.MultipartFile;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.Example;
-import io.swagger.annotations.ExampleProperty;
 import it.mef.tm.scheduled.client.exception.ErrorCode;
 import it.mef.tm.scheduled.client.exception.PreconditionException;
 import it.mef.tm.scheduled.client.service.TaskRunnerService;
@@ -68,7 +63,7 @@ public class MassiveWorkloadController {
 			@ApiParam(value = "Hour of loop process, ex.: \"9,18\" (from 9AM to 9:59AM and from 6PM to 6:59PM) or \"8-10,17-19\" (from 8AM to 9:59AM and from 5PM to 6:59PM)", example = "8-10,17-19") @RequestParam(name = "hour", required = false) String hour,
 			@ApiParam(value = "Days of loop process, ex.: \"MON-FRI\" (from Monday to Friday) or \"MON,WED,FRI\" (Monday, Wednesday and Friday)", example = "MON-FRI") @RequestParam(name = "days", required = false) String days,
 			@ApiParam(value = "Rate for loop in minutes", required = true) @RequestParam(name = "loop-rate", required = true, defaultValue = "5") int loopRate,
-			@ApiParam(value = "File di upload", required = true) @RequestPart(name="zip-file", required = true) MultipartFile fileZip) throws PreconditionException {
+			@ApiParam(value = "File to upload (only .zip file)", required = true) @RequestPart(name="zip-file", required = true) MultipartFile fileZip) throws PreconditionException {
 		// Se c'è già una schedulazione  
 		// e non è stata già annullata
 		// Lancio un'eccezione
@@ -90,6 +85,7 @@ public class MassiveWorkloadController {
 		String pathFinale = StringUtility.concat(pathTimbrature, File.separator, "massive", File.separator, fileZip.getOriginalFilename());
 		
 		try {
+			cleanFolder(StringUtility.concat(pathTimbrature, File.separator, "massive"));
 			Files.write(Paths.get(pathFinale), fileZip.getBytes(), StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE);
 		} catch(IOException ex) {
 			log.error(ErrorCode.TMGFT33.getCode(), ex);
@@ -106,4 +102,18 @@ public class MassiveWorkloadController {
 		return true;
 	}
 
+
+	/**
+	 * Metodo cleanFolder
+	 * @param listFiles
+	 * @throws IOException
+	 */
+	private static void cleanFolder(String path) throws IOException {
+		File[] listFiles = Paths.get(path).toFile().listFiles();
+		for (File file : listFiles) {
+			if (file.isFile()) {
+				Files.delete(file.toPath());
+			}
+		}
+	}
 }
