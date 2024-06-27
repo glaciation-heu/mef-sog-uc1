@@ -1,0 +1,21 @@
+name: Docker Series Builds
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: docker login
+      env:
+        DOCKER_USER: ${{ secrets.DOCKER_USER}}
+        DOCKER_PASS: ${{ secrets.DOCKER_PASS}}
+      run: |
+        docker login -u $DOCKER_USER -p $DOCKER_PASS
+    - name: docker build scheduled-client
+      run: |
+        docker build ./workload-core/scheduled-client -t mef-sog-uc1/scheduled-client:1.0.0
+    - name: docker build elaboration-timb-ms
+      run: |
+        docker build ./workload-core/elaboration-timb-ms -t mef-sog-uc1/elaboration-timb-ms:1.0.0
