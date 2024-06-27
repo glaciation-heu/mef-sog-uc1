@@ -2,8 +2,6 @@ image:
   tag: 3.5.1-debian-11-r25
   pullPolicy: Always
 
-existingLog4jConfigMap: "kafka-log4j-config"
-
 kraft:
   enabled: false
 
