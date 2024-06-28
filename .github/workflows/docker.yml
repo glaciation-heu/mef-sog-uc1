@@ -37,8 +37,11 @@ jobs:
         push: true
 #        tags: ${{ env.DOCKER_IMAGES }}
         tags: scheduled-client:1.0.0
-        labels: ${{ steps.meta.outputs.labels }}
+#        labels: ${{ steps.meta.outputs.labels }}
         context: "${{ github.workspace }}/workload-core/scheduled-client"
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
 #    - name: docker build scheduled-client
 #      run: |
