@@ -31,6 +31,15 @@ jobs:
         images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
         tags: ${{ env.DOCKER_TAGS }}
 
+    - name: Build and push docker image scheduled-client
+      uses: docker/build-push-action@v5
+      with:
+        push: true
+#        tags: ${{ env.DOCKER_IMAGES }}
+        tags: mef-sog-uc1/scheduled-client:1.0.0
+        labels: ${{ steps.meta.outputs.labels }}
+        context: "${{ github.workspace }}/workload-core/scheduled-client"
+
 #    - name: docker build scheduled-client
 #      run: |
 #        docker build ./workload-core/scheduled-client -t mef-sog-uc1/scheduled-client:1.0.0
