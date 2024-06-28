@@ -43,9 +43,11 @@ jobs:
 #        labels: ${{ steps.meta.outputs.labels }}
         context: "${{ github.workspace }}/workload-core/scheduled-client"
 
-#    - name: docker build scheduled-client
-#      run: |
-#        docker build ./workload-core/scheduled-client -t mef-sog-uc1/scheduled-client:1.0.0
-#    - name: docker build elaboration-timb-ms
-#      run: |
-#        docker build ./workload-core/elaboration-timb-ms -t mef-sog-uc1/elaboration-timb-ms:1.0.0
+    - name: Build and push docker image elaboration-timb-ms
+      uses: docker/build-push-action@v6
+      with:
+        push: true
+#        tags: ${{ env.DOCKER_IMAGES }}
+        tags: "ghcr.io/glaciation-heu/mef-sog-uc1/elaboration-timb-ms:1.0.0"
+#        labels: ${{ steps.meta.outputs.labels }}
+        context: "${{ github.workspace }}/workload-core/elaboration-timb-ms"
