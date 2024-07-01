@@ -1,11 +1,13 @@
 name: Docker Series Builds
 
-on: {}
-#  push:
+on:
+  push:
+    branches: []
 #    branches: [ "main" ]
-#    # Publish semver tags as releases.
-##    tags: [ 'v*.*.*' ]
-#  pull_request:
+    # Publish semver tags as releases.
+#    tags: [ 'v*.*.*' ]
+  pull_request:
+    branches: []
 #    branches: [ "main" ]
 
 env:
