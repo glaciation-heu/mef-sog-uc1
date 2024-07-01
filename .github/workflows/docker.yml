@@ -2,12 +2,15 @@ name: Docker Series Builds
 
 on:
   push:
-    branches: []
+    paths:
+      - workload-core/scheduled-client/**
+      - workload-core/elaboration-timb-ms/**
+#on:
+#  push:
 #    branches: [ "main" ]
-    # Publish semver tags as releases.
-#    tags: [ 'v*.*.*' ]
-  pull_request:
-    branches: []
+#    # Publish semver tags as releases.
+##    tags: [ 'v*.*.*' ]
+#  pull_request:
 #    branches: [ "main" ]
 
 env:

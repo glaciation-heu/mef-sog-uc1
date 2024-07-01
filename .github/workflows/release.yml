@@ -2,8 +2,13 @@ name: release
 
 on:
   push:
-    branches:
-      - main
+    paths:
+      - charts/**
+#
+#on:
+#  push:
+#    branches:
+#      - main
 
 jobs:
   release:
