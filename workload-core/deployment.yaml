@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
         - name: scheduled-client
-          image: scheduled-client:1.0.3
+          image: ghcr.io/glaciation-heu/mef-sog-uc1/scheduled-client:1.0.0
           resources:
             requests:
               memory: "2Gi"
@@ -95,7 +95,7 @@ spec:
     spec:
       containers:
         - name: elaboration-timb-ms
-          image: elaboration-timb-ms:1.0.6
+          image: ghcr.io/glaciation-heu/mef-sog-uc1/elaboration-timb-ms:1.0.0
           resources:
             requests:
               memory: "2Gi"
