@@ -1,4 +1,4 @@
-name: release
+name: Charts Series Builds
 
 on:
   push:
