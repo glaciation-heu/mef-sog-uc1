@@ -5,131 +5,7 @@ Create a dedicated namespace for this Kafka cluster. A dedicated namespace allow
 
     kubectl create namespace kafka
 
-## 2. Persistent Volumes (PV) 
-Before installing the Kafka broker and Zookeeper, we need to finalize our persistent volume. For this use case, we went with a dedicated NFS driver which will be shared between all the Kafka brokers and zookeepers. 
-We will set up a 3 broker and 3 zookeeper node setup, therefore we will need 6 persistent volumes in total. The persistent volume claims will be generated automatically by the helm chart at the runtime.
-
-```yaml
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: kafka-dev-pv1
-spec:
-  accessModes:
-    - ReadWriteMany
-  capacity:
-    storage: 8Gi
-  nfs:
-    server: 10.2.2.10 #TODO: update with correct NFS server
-    path: /mnt/kafka/kafka-broker1
-  volumeMode: Filesystem
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: kafka-dev-pv2
-spec:
-  accessModes:
-    - ReadWriteMany
-  capacity:
-    storage: 8Gi
-  nfs:
-    server: 10.2.2.10 #TODO: update with correct NFS server
-    path: /mnt/kafka/kafka-broker2
-  volumeMode: Filesystem
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: kafka-dev-pv3
-spec:
-  accessModes:
-    - ReadWriteMany
-  capacity:
-    storage: 8Gi
-  nfs:
-    server: 10.2.2.10 #TODO: update with correct NFS server
-    path: /mnt/kafka/kafka-broker3
-  volumeMode: Filesystem
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: kafka-dev-zk-pv1
-spec:
-  accessModes:
-    - ReadWriteMany
-  capacity:
-    storage: 10Gi
-  nfs:
-    server: 10.2.2.10 #TODO: update with correct NFS server
-    path: /mnt/kafka/kafka-zk1
-  volumeMode: Filesystem
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: kafka-dev-zk-pv2
-spec:
-  accessModes:
-    - ReadWriteMany
-  capacity:
-    storage: 10Gi
-  nfs:
-    server: 10.2.2.10 #TODO: update with correct NFS server
-    path: /mnt/kafka/kafka-zk2
-  volumeMode: Filesystem
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: kafka-dev-zk-pv3
-spec:
-  accessModes:
-    - ReadWriteMany
-  capacity:
-    storage: 10Gi
-  nfs:
-    server: 10.2.2.10 #TODO: update with correct NFS server
-    path: /mnt/kafka/kafka-zk3
-  volumeMode: Filesystem
-```
-
-In case you are only testing this for POC purposes and don't have access to an NFS drive, you can use a cloud storage like Longhorn:
-```yaml
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: data-kafka-broker-0
-  namespace: kafka
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 2Gi
-  storageClassName: longhorn
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: data-kafka-zookeeper-0
-  namespace: kafka
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 5Gi
-  storageClassName: longhorn
-```
-Create a PersistentVolume and a PersistentVolumeClaim for each broker and zookeeper pod on each worker node by substituting the node name for <host-work-n>.
-
-    kubectl apply -f ./config/pv.yaml
-
-
-## 3. Customize Helm Values 
+## 2. Customize Helm Values 
 The helm chart usually comes with a default set of values. We can override the values with our values.yaml at the runtime. Below is a sample values.yaml file for a Kafka Cluster comprising of 3 brokers and 3 zookeepers in PLAINTEXT mode, and HA configuration. We have added podAntiAffinityPreset: hard to make sure that no two broker/zookeeper pods are on the same node. These Kafka brokers will be accessed via Nodeport on the specified ports.
 
 ```yaml
@@ -148,6 +24,12 @@ auth:
 broker:
   replicaCount: 3
   podAntiAffinityPreset: hard
+  persistence:
+    enabled: true
+    storageClass: longhorn
+    accessModes:
+      - ReadWriteOnce
+    size: 2Gi
 
 controller:
   replicaCount: 0
@@ -156,6 +38,12 @@ zookeeper:
   enabled: true
   replicaCount: 3
   podAntiAffinityPreset: hard
+  persistence:
+    enabled: true
+    storageClass: longhorn
+    accessModes:
+      - ReadWriteOnce
+    size: 5Gi
 
 listeners:
   client:
@@ -171,13 +59,7 @@ externalAccess:
   enabled: false
 ```
 
-## 4. Customize Logging
-We can also customize the logging of our Kafka cluster by passing a custom log4j config file in a config map.
-
-
-    kubectl create configmap kafka-log4j-config -n kafka --from-file=./config/log4j.properties 
-
-## 5. Install Helm Chart
+## 3. Install Helm Chart
 We are now ready to install the Helm Chart in our cluster. This will install two StatefulSets — kafka-broker and kafka-zookeeper which will further manage the pods.
 
 
