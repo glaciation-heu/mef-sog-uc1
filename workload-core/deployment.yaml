@@ -54,6 +54,8 @@ spec:
               value: "/MEF/file/to-be-elaborated"
             - name: FIXEDRATE_WATCHING_FOLDER_SECONDS
               value: "1"
+            - name: TZ
+              value: "Europe/Rome"
           volumeMounts:
             - name: data-mef
               mountPath: /MEF/
@@ -129,6 +131,8 @@ spec:
               value: "12"
             - name: SPRING_KAFKA_CONSUMER_MAX-POLL-RECORDS
               value: "1"
+            - name: TZ
+              value: "Europe/Rome"
 #            - name: SPRING_KAFKA_CONSUMER_MAX-POLL-INTERVAL-MS
 #              value: "30000"
           volumeMounts:
