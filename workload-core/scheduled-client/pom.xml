@@ -64,7 +64,18 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aspects</artifactId>
 		</dependency>
-
+		<!-- Libreria per date -->
+		<dependency>
+		    <groupId>joda-time</groupId>
+		    <artifactId>joda-time</artifactId>
+		    <version>2.12.7</version>
+		</dependency>
+		<!-- Permette di leggere i caratteri speciali nelle entry dei zip -->
+		<dependency>
+		  <groupId>org.apache.commons</groupId>
+		  <artifactId>commons-compress</artifactId>
+		  <version>1.26.2</version>
+		</dependency>
 		<!-- Riavvia automaticamente lo springboot se vengono modificate le classi -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
