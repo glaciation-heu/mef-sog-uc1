@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
         - name: scheduled-client
-          image: ghcr.io/glaciation-heu/mef-sog-uc1/scheduled-client:1.0.0
+          image: ghcr.io/glaciation-heu/mef-sog-uc1/scheduled-client:1.1.0
           resources:
             requests:
               memory: "2Gi"

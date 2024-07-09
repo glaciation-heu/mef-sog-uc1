@@ -18,13 +18,34 @@ public class TaskRunnerService {
     @Autowired
     private TaskService taskService;
     
+    /**
+     * Esegue il task classico di elabaorazione
+     * Metodo runTask
+     * @return
+     */
     public Runnable runTask() {
 
     	return () -> taskService.executeTask();
     }
 
+    /**
+     * Esegue il task massivo di elabaorazione
+     * Metodo runTask
+     * @return
+     */
     public Runnable runMassiveTask() {
 
     	return () -> taskService.executeMassiveTask();
+    }
+    
+    /**
+     * Esegue il task massivo schedulato
+     * di elabaorazione
+     * estraendo solo i file relativi al giorno/ora correnti
+     * @return
+     */
+    public Runnable runMassiveScheduledTask() {
+
+    	return () -> taskService.executeMassiveScheduledTask();
     }
 }

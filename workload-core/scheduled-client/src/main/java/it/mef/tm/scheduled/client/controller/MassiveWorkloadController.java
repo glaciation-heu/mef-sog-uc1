@@ -5,6 +5,7 @@ import static it.mef.tm.scheduled.client.costants.Costants.SISTEMA_PROTOCOLLO_HT
 import static it.mef.tm.scheduled.client.costants.Costants.TYPE_API_OPERATION;
 import static it.mef.tm.scheduled.client.costants.Costants.URL_BASE;
 import static it.mef.tm.scheduled.client.costants.Costants.URL_SERVIZI_GFT_JOB;
+import static it.mef.tm.scheduled.client.costants.Costants.URL_SERVIZI_GFT_MASS_SCHED_START;
 import static it.mef.tm.scheduled.client.costants.Costants.URL_SERVIZI_GFT_MASS_START;
 
 import java.io.File;
@@ -116,4 +117,62 @@ public class MassiveWorkloadController {
 			}
 		}
 	}
+	
+
+	/**
+	 * Servizio per lo start del processo di watching 
+	 * della cartella contenente le timbrature da acquisire
+	 * @return
+	 * @throws PreconditionException
+	 */
+	@ApiOperation(value = TYPE_API_OPERATION, notes = "Service starts massive workload of collecting time stamps based on the day of week and the time of execution."
+			+ "Upload a zip file with the following structure: \n"
+			+ "<i>zip-file.zip</i>: \n"
+			+ "&emsp; - <i>DAY OF WEEK</i> (sub-folder pattern accepted: 1 to 7 or minumum of 3 letters of day 'MON','TUE', etc.) \n"
+			+ "&emsp;&emsp; - <i>HOUR OF DAY</i> (sub-folder pattern accepted: numbers from 0 to 23, or range of hours like 9-13) \n"
+			+ "&emsp;&emsp;&emsp; - <i>timestamps-file.xml</i> \n"
+			+ "This structure allows to set which time stamps files must be elaborated for certain hours of certain days of the week.")
+	@PostMapping(value = URL_SERVIZI_GFT_MASS_SCHED_START)
+	public Boolean startWorkloadScheduled(
+			@ApiParam(value = "Minute of the hour when the elaboration starts. If not set, the scheduling is done every hour at 00 (Ex. 9:00AM, 10:00AM, etc.)") @RequestParam(name = "minute", required = false) Integer minute,
+			@ApiParam(value = "File to upload (only .zip file)", required = true) @RequestPart(name="zip-file", required = true) MultipartFile fileZip) throws PreconditionException {
+		// Se c'è già una schedulazione  
+		// e non è stata già annullata
+		// Lancio un'eccezione
+		if (ScheduledUtil.isScheduledFutureActive()) {
+			throw new PreconditionException(ErrorCode.ERRSCH02.getCode());
+		}
+		
+		try (ZipInputStream zis = new ZipInputStream(fileZip.getInputStream())) {
+			if (zis.getNextEntry() == null) {
+				zis.closeEntry();
+				throw new PreconditionException(ErrorCode.ERRSCH03.getCode());
+			}
+			zis.closeEntry();
+		} catch (IOException e) {
+			log.error(ErrorCode.ERRSCH03.getCode(), e);
+			throw new PreconditionException(ErrorCode.ERRSCH03.getCode());
+		} 
+		
+		String pathFinale = StringUtility.concat(pathTimbrature, File.separator, "massive", File.separator, fileZip.getOriginalFilename());
+		
+		try {
+			cleanFolder(StringUtility.concat(pathTimbrature, File.separator, "massive"));
+			Files.write(Paths.get(pathFinale), fileZip.getBytes(), StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE);
+		} catch(IOException ex) {
+			log.error(ErrorCode.TMGFT33.getCode(), ex);
+			throw new PreconditionException(ErrorCode.TMGFT33.getCode());
+		}
+		
+		String cronExpression = minute != null ? "0 " + minute + " * * * *" : "0 0 * * * *";
+		
+		ScheduledFuture<?> scheduledFuture = taskScheduler.schedule(taskRunnerService.runMassiveScheduledTask(), new CronTrigger(cronExpression));
+		
+		log.info("Scheduled cron task: {}", cronExpression);
+		
+		ScheduledUtil.storeScheduledFuture(scheduledFuture);
+		return true;
+	}
+
+
 }

@@ -22,6 +22,7 @@ public class Costants {
     public static final String URL_SERVIZI_GFT_START = URL_VERSION + "/startWorkload";
     public static final String URL_SERVIZI_GFT_STOP = URL_VERSION + "/stopWorkload";
     public static final String URL_SERVIZI_GFT_MASS_START = URL_VERSION + "/startMassiveWorkload";
+    public static final String URL_SERVIZI_GFT_MASS_SCHED_START = URL_VERSION + "/startMassiveScheduledWorkload";
     public static final String URL_SERVIZI_GFT_MASS_STOP = URL_VERSION + "/stopMassiveWorkload";
 
 	
