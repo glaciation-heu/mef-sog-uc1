@@ -18,31 +18,31 @@ spec:
           image: {{ .Values.scheduledClient.image }}
           resources:
             requests:
-              memory: "2Gi"
-              cpu: "1"
+              memory: '2Gi'
+              cpu: '1'
             limits:
-              memory: "2Gi"
-              cpu: "1"
+              memory: '2Gi'
+              cpu: '1'
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: {{ .Values.scheduledClient.service.port }}
           env:
             - name: SPRING_KAFKA_ENABLED
-              value: "true"
+              value: 'true'
             - name: SPRING_KAFKA_PRODUCER_BOOTSTRAP-SERVERS
               value: {{ .Values.kafka.bootstrapServers }}
             - name: SPRING_KAFKA_PRODUCER_TOPIC
               value: {{ .Values.kafka.topic }}
             - name: SPRING_SERVLET_MULTIPART_MAX-FILE-SIZE
-              value: "500MB"
+              value: '500MB'
             - name: PATH_TIMESTAMPS
-              value: "/MEF/file/timbrature"
+              value: '/MEF/file/timbrature'
             - name: PATH_TIMESTAMPS_TO-BE-ELABORATED
-              value: "/MEF/file/to-be-elaborated"
+              value: '/MEF/file/to-be-elaborated'
             - name: FIXEDRATE_WATCHING_FOLDER_SECONDS
-              value: "1"
+              value: '1'
             - name: TZ
-              value: "Europe/Rome"
+              value: 'Europe/Rome'
           volumeMounts:
             - name: data-mef
               mountPath: /MEF/
@@ -72,43 +72,43 @@ spec:
           image: {{ .Values.elaborationTimbMs.image }}
           resources:
             requests:
-              memory: "2Gi"
-              cpu: "1"
+              memory: '2Gi'
+              cpu: '1'
             limits:
-              memory: "2Gi"
-              cpu: "1"
+              memory: '2Gi'
+              cpu: '1'
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
           env:
             - name: H2_CONSOLE
-              value: "false"
+              value: 'false'
             - name: LOG_LEVEL_JPA
-              value: "false"
+              value: 'false'
             - name: SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS
               value: {{ .Values.kafka.bootstrapServers }}
             - name: SPRING_KAFKA_LISTENER_TOPIC
               value: {{ .Values.kafka.topic }}
             - name: PATH_TIMESTAMPS_ELABORATED
-              value: "/MEF/file/elaborated"
+              value: '/MEF/file/elaborated'
             - name: PATH_TIMESTAMPS_ACQUIRED
-              value: "/MEF/file/completed"
+              value: '/MEF/file/completed'
             - name: PATH_TIMESTAMPS_DISCARDED
-              value: "/MEF/file/discarded"
+              value: '/MEF/file/discarded'
             - name: PATH_METRICS
-              value: "/MEF/metrics"
+              value: '/MEF/metrics'
             - name: SPRING_KAFKA_LISTENER_PARTITIONS
-              value: "12"
-#              value: "{{ .Values.kafka.listenerPartitions }}"
+              value: '12'
+#              value: '{{ .Values.kafka.listenerPartitions }}'
             - name: SPRING_KAFKA_LISTENER_CONCURRENCY
-              value: "12"
-#              value: "{{ .Values.kafka.listenerConcurrency }}"
+              value: '12'
+#              value: '{{ .Values.kafka.listenerConcurrency }}'
             - name: SPRING_KAFKA_CONSUMER_MAX-POLL-RECORDS
-              value: "1"
+              value: '1'
             - name: TZ
-              value: "Europe/Rome"
+              value: 'Europe/Rome'
 #            - name: SPRING_KAFKA_CONSUMER_MAX-POLL-INTERVAL-MS
-#              value: "30000"
+#              value: '30000'
           volumeMounts:
             - name: data-mef
               mountPath: /MEF/
