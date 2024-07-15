@@ -1,4 +1,4 @@
-namespace: uc1-workload
+namespace: mef-sog-uc1-wl
 
 persistentVolumeClaim:
   storage: 5Gi
@@ -6,7 +6,7 @@ persistentVolumeClaim:
 
 kafka:
   bootstrapServers: 'kafka.kafka.svc.cluster.local:9092'
-  consumerGroup: 'uc1-workload'
+  consumerGroup: 'mef-sog-uc1-wl'
   topic: test
   listenerPartitions: 12
   listenerConcurrency: 12
