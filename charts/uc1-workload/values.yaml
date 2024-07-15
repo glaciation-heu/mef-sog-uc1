@@ -8,8 +8,8 @@ kafka:
   bootstrapServers: 'kafka.kafka.svc.cluster.local:9092'
   consumerGroup: 'uc1-workload'
   topic: test
-  listenerPartitions: '12'
-  listenerConcurrency: '12'
+  listenerPartitions: 12
+  listenerConcurrency: 12
 
 scheduledClient:
   image: 'ghcr.io/glaciation-heu/mef-sog-uc1/scheduled-client:1.1.0'

@@ -98,9 +98,9 @@ spec:
             - name: PATH_METRICS
               value: "/MEF/metrics"
             - name: SPRING_KAFKA_LISTENER_PARTITIONS
-              value: {{ .Values.kafka.listenerPartitions }}
+              value: "{{ .Values.kafka.listenerPartitions }}"
             - name: SPRING_KAFKA_LISTENER_CONCURRENCY
-              value: {{ .Values.kafka.listenerConcurrency }}
+              value: "{{ .Values.kafka.listenerConcurrency }}"
             - name: SPRING_KAFKA_CONSUMER_MAX-POLL-RECORDS
               value: "1"
             - name: TZ
