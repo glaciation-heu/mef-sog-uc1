@@ -60,7 +60,7 @@ spec:
   triggers:
     - type: kafka
       metadata:
-        bootstrapServers: "{{ .Values.kafka.bootstrapServers }}"
+        bootstrapServers: '{{ .Values.kafka.bootstrapServers }}'
         consumerGroup: {{ .Values.kafka.consumerGroup }}
         topic: {{ .Values.kafka.topic }}
         lagThreshold: '6'

@@ -5,18 +5,18 @@ persistentVolumeClaim:
   storageClassName: longhorn
 
 kafka:
-  bootstrapServers: kafka.kafka.svc.cluster.local:9092
-  consumerGroup: uc1-workload
+  bootstrapServers: 'kafka.kafka.svc.cluster.local:9092'
+  consumerGroup: 'uc1-workload'
   topic: test
-  listenerPartitions: 12
-  listenerConcurrency: 12
+  listenerPartitions: '12'
+  listenerConcurrency: '12'
 
 scheduledClient:
-  image: ghcr.io/glaciation-heu/mef-sog-uc1/scheduled-client:1.1.0
+  image: 'ghcr.io/glaciation-heu/mef-sog-uc1/scheduled-client:1.1.0'
   service:
     type: NodePort
     port: 8080
     nodePort: 30001
 
 elaborationTimbMs:
-  image: ghcr.io/glaciation-heu/mef-sog-uc1/elaboration-timb-ms:1.0.0
+  image: 'ghcr.io/glaciation-heu/mef-sog-uc1/elaboration-timb-ms:1.0.0'

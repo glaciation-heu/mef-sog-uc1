@@ -30,9 +30,9 @@ spec:
             - name: SPRING_KAFKA_ENABLED
               value: "true"
             - name: SPRING_KAFKA_PRODUCER_BOOTSTRAP-SERVERS
-              value: "{{ .Values.kafka.bootstrapServers }}"
+              value: {{ .Values.kafka.bootstrapServers }}
             - name: SPRING_KAFKA_PRODUCER_TOPIC
-              value: "{{ .Values.kafka.topic }}"
+              value: {{ .Values.kafka.topic }}
             - name: SPRING_SERVLET_MULTIPART_MAX-FILE-SIZE
               value: "500MB"
             - name: PATH_TIMESTAMPS
@@ -86,9 +86,9 @@ spec:
             - name: LOG_LEVEL_JPA
               value: "false"
             - name: SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS
-              value: "{{ .Values.kafka.bootstrapServers }}"
+              value: {{ .Values.kafka.bootstrapServers }}
             - name: SPRING_KAFKA_LISTENER_TOPIC
-              value: "{{ .Values.kafka.topic }}"
+              value: {{ .Values.kafka.topic }}
             - name: PATH_TIMESTAMPS_ELABORATED
               value: "/MEF/file/elaborated"
             - name: PATH_TIMESTAMPS_ACQUIRED
@@ -98,9 +98,9 @@ spec:
             - name: PATH_METRICS
               value: "/MEF/metrics"
             - name: SPRING_KAFKA_LISTENER_PARTITIONS
-              value: "{{ .Values.kafka.listenerPartitions }}"
+              value: {{ .Values.kafka.listenerPartitions }}
             - name: SPRING_KAFKA_LISTENER_CONCURRENCY
-              value: "{{ .Values.kafka.listenerConcurrency }}"
+              value: {{ .Values.kafka.listenerConcurrency }}
             - name: SPRING_KAFKA_CONSUMER_MAX-POLL-RECORDS
               value: "1"
             - name: TZ
