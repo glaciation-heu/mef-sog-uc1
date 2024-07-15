@@ -2,6 +2,15 @@ apiVersion: v1
 entries:
   kafdrop:
   - apiVersion: v1
+    appVersion: 1.0.0
+    created: "2024-07-15T15:08:21.159762458Z"
+    description: A Helm chart for UC1 Workload
+    digest: baae9ead64b25ca467eb7357393cf303eb9e1f49e12fd7e9cfc7dea27ee0e8a9
+    name: kafdrop
+    urls:
+    - https://github.com/glaciation-heu/mef-sog-uc1/releases/download/kafdrop-1.0.0/kafdrop-1.0.0.tgz
+    version: 1.0.0
+  - apiVersion: v1
     appVersion: 3.x
     created: "2024-07-15T09:40:35.395417963Z"
     description: A Helm chart for Kafdrop
@@ -59,4 +68,4 @@ entries:
     urls:
     - https://github.com/glaciation-heu/mef-sog-uc1/releases/download/kafka-28.0.4/kafka-28.0.4.tgz
     version: 28.0.4
-generated: "2024-07-15T09:40:35.395439072Z"
+generated: "2024-07-15T15:08:21.159802583Z"
