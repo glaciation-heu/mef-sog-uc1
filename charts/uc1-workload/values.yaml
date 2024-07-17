@@ -16,6 +16,7 @@ scheduledClient:
   service:
     type: NodePort
     port: 8080
+    targetPort: http
     nodePort: 30001
 
 elaborationTimbMs:

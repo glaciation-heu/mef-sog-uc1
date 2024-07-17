@@ -9,7 +9,7 @@ spec:
     app: scheduled-client
   ports:
     - port: {{ .Values.scheduledClient.service.port }}
-      targetPort: {{ .Values.scheduledClient.service.port }}
+      targetPort: {{ .Values.scheduledClient.service.targetPort }}
       protocol: TCP
 {{ if (and (eq .Values.scheduledClient.service.type "NodePort") (not (empty .Values.scheduledClient.service.nodePort))) }}
       nodePort: {{.Values.scheduledClient.service.nodePort }}
