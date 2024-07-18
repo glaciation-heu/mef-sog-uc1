@@ -1,4 +1,5 @@
 namespace: mef-sog-uc1-wl
+timeZone: 'Europe/Rome'
 
 persistentVolumeClaim:
   storage: 5Gi
@@ -8,16 +9,49 @@ kafka:
   bootstrapServers: 'kafka.kafka.svc.cluster.local:9092'
   consumerGroup: 'mef-sog-uc1-wl'
   topic: test
-  listenerPartitions: 12
-  listenerConcurrency: 12
+  listener:
+    partitions: 12
+    concurrency: 12
+  consumer:
+    maxPollRecords: 1
+    maxPollIntervalMs: 300000
 
 scheduledClient:
+  kafkaEnabled: 'true'
   image: 'ghcr.io/glaciation-heu/mef-sog-uc1/scheduled-client:1.1.0'
+  multipartMaxFileSize: '500MB'
+  watchingFolderSeconds: 1
   service:
     type: NodePort
     port: 8080
     targetPort: http
     nodePort: 30001
+  resources:
+    requests:
+      memory: '2Gi'
+      cpu: '1'
+    limits:
+      memory: '2Gi'
+      cpu: '1'
 
 elaborationTimbMs:
   image: 'ghcr.io/glaciation-heu/mef-sog-uc1/elaboration-timb-ms:1.0.0'
+  logLevelJpa: false
+  h2Console: false
+  resources:
+    requests:
+      memory: '2Gi'
+      cpu: '1'
+    limits:
+      memory: '2Gi'
+      cpu: '1'
+
+volume:
+  mountPath: '/MEF/'
+  path:
+    timbrature: '/MEF/file/timbrature'
+    toBeElaborated: '/MEF/file/to-be-elaborated'
+    elaborated: '/MEF/file/elaborated'
+    acquired: '/MEF/file/completed'
+    discarded: '/MEF/file/discarded'
+    metrics: '/MEF/metrics'
