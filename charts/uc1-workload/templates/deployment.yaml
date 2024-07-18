@@ -25,7 +25,9 @@ spec:
               cpu: '1'
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: {{ .Values.scheduledClient.service.port }}
+            - name: http
+              containerPort: {{ .Values.scheduledClient.service.port }}
+              protocol: TCP
           env:
             - name: SPRING_KAFKA_ENABLED
               value: 'true'
