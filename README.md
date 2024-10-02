@@ -4,7 +4,7 @@ The UC1 use case is presented in the doc: D2.1 provides the GLACIATION platform 
 
 ## Component Overview:
 
-- **Description**: Distributed Knowledge Graph refers to the Novel Metadata Fabric of the GLACIATION platform, contains a Use Case with 3 components as follows:
+- **Description**: Distributed Knowledge Graph refers to the Novel Metadata Fabric of the GLACIATION platform, contains a Use Casethat requires the following components:
 * [LongHorn](./longhorn/README.md)
 * [Metric-Server component](./metric-server/README.md)
 * [Prometheus & Grafana ](./monitoring/README.md)
