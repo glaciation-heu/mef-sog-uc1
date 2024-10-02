@@ -82,3 +82,4 @@ The service was created using:
 *   [Lombok v1.18.24](https://projectlombok.org/)
 *   Prometheus metrics: [Micrometer](https://docs.micrometer.io/micrometer/reference/implementations/prometheus.html)
 
+
