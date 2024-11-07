@@ -18,7 +18,7 @@ kafka:
 
 scheduledClient:
   kafkaEnabled: 'true'
-  image: 'ghcr.io/glaciation-heu/mef-sog-uc1/scheduled-client:1.1.0'
+  image: 'ghcr.io/glaciation-heu/mef-sog-uc1/scheduled-client:1.2.0'
   multipartMaxFileSize: '500MB'
   watchingFolderSeconds: 1
   service:
@@ -30,21 +30,30 @@ scheduledClient:
     requests:
       memory: '2Gi'
       cpu: '1'
+      nvidiaGpu: '0'
+      ephemeralStorage: '1Mi'
     limits:
       memory: '2Gi'
       cpu: '1'
+      nvidiaGpu: '0'
+      ephemeralStorage: '20Mi'
 
 elaborationTimbMs:
-  image: 'ghcr.io/glaciation-heu/mef-sog-uc1/elaboration-timb-ms:1.0.0'
+  image: 'ghcr.io/glaciation-heu/mef-sog-uc1/elaboration-timb-ms:1.1.0'
   logLevelJpa: false
   h2Console: false
+  metricsEnabled: false
   resources:
     requests:
       memory: '2Gi'
       cpu: '1'
+      nvidiaGpu: '0'
+      ephemeralStorage: '1Mi'
     limits:
       memory: '2Gi'
       cpu: '1'
+      nvidiaGpu: '0'
+      ephemeralStorage: '20Mi'
 
 volume:
   mountPath: '/MEF/'

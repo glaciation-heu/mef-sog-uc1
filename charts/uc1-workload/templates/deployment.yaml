@@ -20,9 +20,13 @@ spec:
             requests:
               memory: '{{ .Values.scheduledClient.resources.requests.memory }}'
               cpu: '{{ .Values.scheduledClient.resources.requests.cpu }}'
+              nvidia.com/gpu: {{ .Values.scheduledClient.resources.requests.nvidiaGpu }}
+              ephemeral-storage: {{ .Values.scheduledClient.resources.requests.ephemeralStorage }}
             limits:
               memory: '{{ .Values.scheduledClient.resources.limits.memory }}'
               cpu: '{{ .Values.scheduledClient.resources.limits.cpu }}'
+              nvidia.com/gpu: {{ .Values.scheduledClient.resources.limits.nvidiaGpu }}
+              ephemeral-storage: {{ .Values.scheduledClient.resources.limits.ephemeralStorage }}
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -41,6 +45,10 @@ spec:
               value: '{{ .Values.volume.path.timbrature }}'
             - name: PATH_TIMESTAMPS_TO-BE-ELABORATED
               value: '{{ .Values.volume.path.toBeElaborated }}'
+            - name: PATH_TIMESTAMPS_ACQUIRED
+              value: '{{ .Values.volume.path.acquired }}'
+            - name: PATH_TIMESTAMPS_DISCARDED
+              value: '{{ .Values.volume.path.discarded }}'
             - name: FIXEDRATE_WATCHING_FOLDER_SECONDS
               value: '{{ .Values.scheduledClient.watchingFolderSeconds }}'
             - name: TZ
@@ -76,9 +84,13 @@ spec:
             requests:
               memory: '{{ .Values.elaborationTimbMs.resources.requests.memory }}'
               cpu: '{{ .Values.elaborationTimbMs.resources.requests.cpu }}'
+              nvidia.com/gpu: {{ .Values.elaborationTimbMs.resources.requests.nvidiaGpu }}
+              ephemeral-storage: {{ .Values.elaborationTimbMs.resources.requests.ephemeralStorage }}
             limits:
               memory: '{{ .Values.elaborationTimbMs.resources.limits.memory }}'
               cpu: '{{ .Values.elaborationTimbMs.resources.limits.cpu }}'
+              nvidia.com/gpu: {{ .Values.elaborationTimbMs.resources.limits.nvidiaGpu }}
+              ephemeral-storage: {{ .Values.elaborationTimbMs.resources.limits.ephemeralStorage }}
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
@@ -111,6 +123,8 @@ spec:
               value: '{{ .Values.kafka.consumer.maxPollIntervalMs }}'
             - name: TZ
               value: '{{ .Values.timeZone }}'
+            - name: METRICS_ENABLED
+              value: '{{ .Values.elaborationTimbMs.metricsEnabled }}'
           volumeMounts:
             - name: data-mef
               mountPath: '{{ .Values.volume.mountPath }}'
