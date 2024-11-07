@@ -38,6 +38,9 @@ public class MetricsLog {
 
 	@Value("${path.metrics}")
 	private String pathMetrics;
+
+    @Value("${metrics.enabled}")
+    private boolean metricsEnabled;
 	
     @Autowired
     private MeterRegistry meterRegistry;
@@ -90,6 +93,7 @@ public class MetricsLog {
     }
 
     public void writeLogMetrics(Path fileInProgress) throws IOException {
+        if (!metricsEnabled) return;
         String idFile = fileInProgress.toFile().getName();
         String dimFile = String.format("%,d kilobytes", Files.size(fileInProgress) / 1024);
 //        System.out.println("FILE ID: "+idFile+" - FILE DIMENSION: "+dimFile+" - CPU LOAD: "+getProcessCpuLoad()+" - MEMORY USAGE: "+getMemoryUsage());

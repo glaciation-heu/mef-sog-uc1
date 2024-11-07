@@ -41,7 +41,9 @@ path:
     timbrature.completed: ${PATH_TIMESTAMPS_ACQUIRED:C:\MEF\file\completed}
     timbrature.discarded: ${PATH_TIMESTAMPS_DISCARDED:C:\MEF\file\discarded}
     metrics: ${PATH_METRICS:C:\MEF\file\metrics}
-    
+
+metrics:
+    enabled: ${METRICS_ENABLED:false}
     
 management:
     endpoints:

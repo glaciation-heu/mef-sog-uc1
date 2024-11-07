@@ -52,6 +52,10 @@ spec:
               value: "/MEF/file/timbrature"
             - name: PATH_TIMESTAMPS_TO-BE-ELABORATED
               value: "/MEF/file/to-be-elaborated"
+            - name: PATH_TIMESTAMPS_ACQUIRED
+              value: "/MEF/file/completed"
+            - name: PATH_TIMESTAMPS_DISCARDED
+              value: "/MEF/file/discarded"
             - name: FIXEDRATE_WATCHING_FOLDER_SECONDS
               value: "1"
             - name: TZ
@@ -133,6 +137,8 @@ spec:
               value: "1"
             - name: TZ
               value: "Europe/Rome"
+            - name: METRICS_ENABLED
+              value: "false"
 #            - name: SPRING_KAFKA_CONSUMER_MAX-POLL-INTERVAL-MS
 #              value: "30000"
           volumeMounts:

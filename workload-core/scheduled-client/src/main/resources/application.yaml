@@ -19,6 +19,8 @@ swagger:
 path:
     timbrature: ${PATH_TIMESTAMPS:C:\MEF\file\timbrature}
     timbrature.to-be-elaborated: ${PATH_TIMESTAMPS_TO-BE-ELABORATED:C:\MEF\file\to-be-elaborated}
+    timbrature.completed: ${PATH_TIMESTAMPS_ACQUIRED:C:\MEF\file\completed}
+    timbrature.discarded: ${PATH_TIMESTAMPS_DISCARDED:C:\MEF\file\discarded}
 
 server:
     port: 8080

@@ -3,11 +3,13 @@ package it.mef.tm.scheduled.client.service;
 import static it.mef.tm.scheduled.client.costants.Costants.FORMAT_DATE;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
@@ -18,6 +20,7 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipFile;
 import org.apache.commons.compress.archivers.zip.ZipFile.Builder;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -48,6 +51,12 @@ public class TaskService {
 
 	@Value("${path.timbrature.to-be-elaborated}")
 	private String pathTimbratureToBeElaborated;
+
+	@Value("${path.timbrature.completed}")
+	private String pathTimbratureCompleted;
+
+	@Value("${path.timbrature.discarded}")
+	private String pathTimbratureDiscarded;
 
 	/**
 	 * Servizio che esegue l'elaborazione massiva del task
@@ -183,6 +192,7 @@ public class TaskService {
 	 */
     public void executeTask() {
 		log.info("Process started");
+		deleteOldFileCompleted();
     	File[] listFiles = Paths.get(pathTimbrature).toFile().listFiles();
     	for (File file : listFiles) {
     		try {
@@ -233,5 +243,39 @@ public class TaskService {
 				throw e;
 			}
 		}
+	}
+
+	/**
+	 * Questo metodo elimina i file completati più vecchi di un mese.
+	 * In questo modo si evita la saturazione del volume
+	 */
+	public void deleteOldFileCompleted() {
+
+		File directoryCompleted = new File(pathTimbratureCompleted);
+		File directoryDiscarded = new File(pathTimbratureDiscarded);
+
+		FileFilter filter = file -> {
+            if (!file.isFile()) return false;
+            LocalDateTime now = new LocalDateTime();
+            LocalDateTime dt = new LocalDateTime(file.lastModified());
+            if (dt!=null && dt.toDateTime().isBefore(now.minusMonths(1).toDateTime()))
+                return true;
+            return false;
+        };
+
+		File[] fileToDeleteCompleted = directoryCompleted.listFiles(filter);
+		File[] fileToDeleteDiscarded = directoryDiscarded.listFiles(filter);
+
+		if (fileToDeleteCompleted != null) {
+			for(File f: fileToDeleteCompleted) {
+				f.delete();
+			}
+		}
+		if (fileToDeleteDiscarded != null) {
+			for(File f: fileToDeleteDiscarded) {
+				f.delete();
+			}
+		}
+
 	}
 }
