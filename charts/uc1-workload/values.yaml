@@ -48,12 +48,12 @@ elaborationTimbMs:
       memory: '2Gi'
       cpu: '1'
       nvidiaGpu: '0'
-      ephemeralStorage: '1Mi'
+      ephemeralStorage: '20Mi'
     limits:
       memory: '2Gi'
       cpu: '1'
       nvidiaGpu: '0'
-      ephemeralStorage: '20Mi'
+      ephemeralStorage: '200Mi'
 
 volume:
   mountPath: '/MEF/'
