@@ -61,4 +61,4 @@ minio:
     bucket: ${MINIO_BUCKET:uc1}
     credentials:
         accessKey: ${MINIO_CREDENTIALS_ACCESSKEY:hXhsTQ9lN4Jbki7Ydm7Z}
-        secretKey: ${MINIO_CREDENTIALS_ACCESSKEY:U2ZD4qygrx4EApjg3fmHfCIm6IjvxDTNgErrw9bI}
+        secretKey: ${MINIO_CREDENTIALS_SECRETKEY:U2ZD4qygrx4EApjg3fmHfCIm6IjvxDTNgErrw9bI}

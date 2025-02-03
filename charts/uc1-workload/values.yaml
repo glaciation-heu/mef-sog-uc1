@@ -1,4 +1,7 @@
 namespace: mef-sog-uc1-wl
+labels:
+  create-ca-bundle: "true"
+
 timeZone: 'Europe/Rome'
 
 persistentVolumeClaim:
@@ -8,7 +11,8 @@ persistentVolumeClaim:
 kafka:
   bootstrapServers: 'kafka.kafka.svc.cluster.local:9092'
   consumerGroup: 'mef-sog-uc1-wl'
-  topic: test
+  topic: flusso-default
+  topicExtra: flusso-encrypt
   listener:
     partitions: 12
     concurrency: 12
@@ -18,7 +22,7 @@ kafka:
 
 scheduledClient:
   kafkaEnabled: 'true'
-  image: 'ghcr.io/glaciation-heu/mef-sog-uc1/scheduled-client:1.2.0'
+  image: 'ghcr.io/glaciation-heu/mef-sog-uc1/scheduled-client:2.0.0'
   multipartMaxFileSize: '500MB'
   watchingFolderSeconds: 1
   service:
@@ -39,7 +43,7 @@ scheduledClient:
       ephemeralStorage: '20Mi'
 
 elaborationTimbMs:
-  image: 'ghcr.io/glaciation-heu/mef-sog-uc1/elaboration-timb-ms:1.1.0'
+  image: 'ghcr.io/glaciation-heu/mef-sog-uc1/elaboration-timb-ms:2.0.0'
   logLevelJpa: false
   h2Console: false
   metricsEnabled: false
@@ -54,6 +58,18 @@ elaborationTimbMs:
       cpu: '1'
       nvidiaGpu: '0'
       ephemeralStorage: '200Mi'
+  deployment:
+    default:
+      minio:
+        enabled: false
+    encrypt:
+      minio:
+        enabled: true
+        endpoint: https://glaciation-tenant.integration
+        bucket: uc1
+        credentials:
+          accessKey: hXhsTQ9lN4Jbki7Ydm7Z
+          secretKey: U2ZD4qygrx4EApjg3fmHfCIm6IjvxDTNgErrw9bI
 
 volume:
   mountPath: '/MEF/'

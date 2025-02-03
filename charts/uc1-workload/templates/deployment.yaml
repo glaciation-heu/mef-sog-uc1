@@ -39,6 +39,8 @@ spec:
               value: {{ .Values.kafka.bootstrapServers }}
             - name: SPRING_KAFKA_PRODUCER_TOPIC
               value: {{ .Values.kafka.topic }}
+            - name: SPRING_KAFKA_PRODUCER_TOPIC_EXTRA
+              value: {{ .Values.kafka.topicExtra }}
             - name: SPRING_SERVLET_MULTIPART_MAX-FILE-SIZE
               value: '{{ .Values.scheduledClient.multipartMaxFileSize }}'
             - name: PATH_TIMESTAMPS
@@ -125,11 +127,111 @@ spec:
               value: '{{ .Values.timeZone }}'
             - name: METRICS_ENABLED
               value: '{{ .Values.elaborationTimbMs.metricsEnabled }}'
+            - name: MINIO_ENABLED
+              value: '{{ .Values.elaborationTimbMs.deployment.default.minio.enabled }}'
           volumeMounts:
             - name: data-mef
               mountPath: '{{ .Values.volume.mountPath }}'
+            - mountPath: /etc/ssl/certs/ca.crt
+              subPath: ca.crt
+              name: ca-bundle
       volumes:
         - name: data-mef
           persistentVolumeClaim:
             claimName: data-mef-pvc
+        - name: ca-bundle
+          configMap:
+            defaultMode: 422
+            name: ca-bundle
+
+      restartPolicy: Always
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elaboration-timb-ms-deployment-2
+  namespace: {{ .Values.namespace }}
+spec:
+  #  replicas: 4
+  selector:
+    matchLabels:
+      app: elaboration-timb-ms
+  template:
+    metadata:
+      labels:
+        app: elaboration-timb-ms
+    spec:
+      containers:
+        - name: elaboration-timb-ms
+          image: {{ .Values.elaborationTimbMs.image }}
+          resources:
+            requests:
+              memory: '{{ .Values.elaborationTimbMs.resources.requests.memory }}'
+              cpu: '{{ .Values.elaborationTimbMs.resources.requests.cpu }}'
+              nvidia.com/gpu: {{ .Values.elaborationTimbMs.resources.requests.nvidiaGpu }}
+              ephemeral-storage: {{ .Values.elaborationTimbMs.resources.requests.ephemeralStorage }}
+            limits:
+              memory: '{{ .Values.elaborationTimbMs.resources.limits.memory }}'
+              cpu: '{{ .Values.elaborationTimbMs.resources.limits.cpu }}'
+              nvidia.com/gpu: {{ .Values.elaborationTimbMs.resources.limits.nvidiaGpu }}
+              ephemeral-storage: {{ .Values.elaborationTimbMs.resources.limits.ephemeralStorage }}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: H2_CONSOLE
+              value: '{{ .Values.elaborationTimbMs.h2Console }}'
+            - name: LOG_LEVEL_JPA
+              value: '{{ .Values.elaborationTimbMs.logLevelJpa }}'
+            - name: SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS
+              value: {{ .Values.kafka.bootstrapServers }}
+            - name: SPRING_KAFKA_LISTENER_TOPIC
+              value: {{ .Values.kafka.topicExtra }}
+            - name: PATH_TIMESTAMPS_ELABORATED
+              value: '{{ .Values.volume.path.elaborated }}'
+            - name: PATH_TIMESTAMPS_ACQUIRED
+              value: '{{ .Values.volume.path.acquired }}'
+            - name: PATH_TIMESTAMPS_DISCARDED
+              value: '{{ .Values.volume.path.discarded }}'
+            - name: PATH_METRICS
+              value: '{{ .Values.volume.path.metrics }}'
+            - name: SPRING_KAFKA_CONSUMER_GROUP-ID
+              value: '{{ .Values.kafka.consumerGroup }}'
+            - name: SPRING_KAFKA_LISTENER_PARTITIONS
+              value: '{{ .Values.kafka.listener.partitions }}'
+            - name: SPRING_KAFKA_LISTENER_CONCURRENCY
+              value: '{{ .Values.kafka.listener.concurrency }}'
+            - name: SPRING_KAFKA_CONSUMER_MAX-POLL-RECORDS
+              value: '{{ .Values.kafka.consumer.maxPollRecords }}'
+            - name: SPRING_KAFKA_CONSUMER_MAX-POLL-INTERVAL-MS
+              value: '{{ .Values.kafka.consumer.maxPollIntervalMs }}'
+            - name: TZ
+              value: '{{ .Values.timeZone }}'
+            - name: METRICS_ENABLED
+              value: '{{ .Values.elaborationTimbMs.metricsEnabled }}'
+            - name: MINIO_ENABLED
+              value: '{{ .Values.elaborationTimbMs.deployment.encrypt.minio.enabled }}'
+            - name: MINIO_ENDPOINT
+              value: '{{ .Values.elaborationTimbMs.deployment.encrypt.minio.endpoint }}'
+            - name: MINIO_BUCKET
+              value: '{{ .Values.elaborationTimbMs.deployment.encrypt.minio.bucket }}'
+            - name: MINIO_CREDENTIALS_ACCESSKEY
+              value: '{{ .Values.elaborationTimbMs.deployment.encrypt.minio.credentials.accessKey }}'
+            - name: MINIO_CREDENTIALS_SECRETKEY
+              value: '{{ .Values.elaborationTimbMs.deployment.encrypt.minio.credentials.secretKey }}'
+          volumeMounts:
+            - name: data-mef
+              mountPath: '{{ .Values.volume.mountPath }}'
+            - mountPath: /etc/ssl/certs/ca.crt
+              subPath: ca.crt
+              name: ca-bundle
+      volumes:
+        - name: data-mef
+          persistentVolumeClaim:
+            claimName: data-mef-pvc
+        - name: ca-bundle
+          configMap:
+            defaultMode: 422
+            name: ca-bundle
+
       restartPolicy: Always

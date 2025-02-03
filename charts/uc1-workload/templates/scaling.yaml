@@ -65,3 +65,31 @@ spec:
         topic: {{ .Values.kafka.topic }}
         lagThreshold: '6'
         offsetResetPolicy: earliest
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: elaboration-timb-ms-scaled-2
+  namespace: {{ .Values.namespace }}
+spec:
+  scaleTargetRef:
+    name: elaboration-timb-ms-deployment-2
+  cooldownPeriod: 600
+  maxReplicaCount:  4
+  advanced:
+    horizontalPodAutoscalerConfig:
+      behavior:
+        scaleDown:
+          stabilizationWindowSeconds: 600
+          policies:
+            - type: Percent
+              value: 50
+              periodSeconds: 30
+  triggers:
+    - type: kafka
+      metadata:
+        bootstrapServers: '{{ .Values.kafka.bootstrapServers }}'
+        consumerGroup: {{ .Values.kafka.consumerGroup }}
+        topic: {{ .Values.kafka.topicExtra }}
+        lagThreshold: '6'
+        offsetResetPolicy: earliest
