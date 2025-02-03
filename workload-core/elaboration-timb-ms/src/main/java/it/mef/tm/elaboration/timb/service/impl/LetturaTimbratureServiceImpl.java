@@ -8,6 +8,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.stream.Collectors;
@@ -16,6 +18,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
+import io.minio.errors.*;
+import it.mef.tm.elaboration.timb.service.MinioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -48,6 +52,9 @@ public class LetturaTimbratureServiceImpl implements LetturaTimbratureService {
 
 	@Autowired
 	private FileTimbratureService fileTimbratureService;
+
+	@Autowired
+	private MinioService minioService;
 	
 	@Value("${path.timbrature.elaborated}")
 	private String pathElaborated;
@@ -57,6 +64,15 @@ public class LetturaTimbratureServiceImpl implements LetturaTimbratureService {
 	
 	@Value("${path.timbrature.discarded}")
 	private String pathDiscarded;
+
+	@Value(value = "${spring.kafka.listener.topic}")
+	private String topic;
+
+	@Value(value = "${minio.enabled}")
+	private boolean minioEnabled;
+
+	@Value(value = "${minio.bucket}")
+	private String minioBucket;
 	
 	@Override
 	public void letturaFornitura(String pathToFile) throws JAXBException, IOException {
@@ -96,9 +112,30 @@ public class LetturaTimbratureServiceImpl implements LetturaTimbratureService {
 		result = result && esito.getStatoAcquisizioneFinale().equals(StatoAcquisizioneTimbratureEnum.ACQ_TIMBRATURE_OK);
 		
 		if (!result) {
-			Files.move(fileInProgress, Paths.get(pathDiscarded+File.separator+fileInProgress.toFile().getName()), StandardCopyOption.REPLACE_EXISTING);
+			Files.move(fileInProgress, Paths.get(pathDiscarded+File.separator+topic+File.separator+fileInProgress.toFile().getName()), StandardCopyOption.REPLACE_EXISTING);
 		} else {
-			Files.move(fileInProgress, Paths.get(pathCompleted+File.separator+fileInProgress.toFile().getName()), StandardCopyOption.REPLACE_EXISTING);
+			Files.move(fileInProgress, Paths.get(pathCompleted+File.separator+topic+File.separator+fileInProgress.toFile().getName()), StandardCopyOption.REPLACE_EXISTING);
+			if (minioEnabled) {
+                try {
+                    minioService.uploadObject(minioBucket, fileInProgress.toFile().getName(), pathCompleted+File.separator+topic+File.separator+fileInProgress.toFile().getName());
+                } catch (ServerException e) {
+                    throw new RuntimeException(e);
+                } catch (InsufficientDataException e) {
+                    throw new RuntimeException(e);
+                } catch (ErrorResponseException e) {
+                    throw new RuntimeException(e);
+                } catch (NoSuchAlgorithmException e) {
+                    throw new RuntimeException(e);
+                } catch (InvalidKeyException e) {
+                    throw new RuntimeException(e);
+                } catch (InvalidResponseException e) {
+                    throw new RuntimeException(e);
+                } catch (XmlParserException e) {
+                    throw new RuntimeException(e);
+                } catch (InternalException e) {
+                    throw new RuntimeException(e);
+                }
+            }
 		}
 		
 		writeElaboratedFile(fileInProgress, esito);
@@ -110,7 +147,6 @@ public class LetturaTimbratureServiceImpl implements LetturaTimbratureService {
 	 * Metodo writeElaboratedFile
 	 * @param filePath
 	 * @param esito
-	 * @param result
 	 * @throws JAXBException
 	 */
 	private void writeElaboratedFile(Path filePath, TimbraturaEsitoLettura esito) throws JAXBException {
@@ -127,7 +163,7 @@ public class LetturaTimbratureServiceImpl implements LetturaTimbratureService {
         Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
         // output pretty printed
         jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        File file = new File(pathElaborated + File.separator 
+        File file = new File(pathElaborated + File.separator + topic + File.separator
         		+ filePath.toFile().getName().substring(0, filePath.toFile().getName().lastIndexOf(".")) + RESULT_EXTENSION);
         jaxbMarshaller.marshal(ft, file);
 	}

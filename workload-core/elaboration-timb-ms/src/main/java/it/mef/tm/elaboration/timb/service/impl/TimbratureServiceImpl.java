@@ -96,10 +96,9 @@ public class TimbratureServiceImpl implements TimbratureService {
 	 * @param rawInput
 	 * @param timbrAcquisite
 	 * @param rawScartate
-	 * @param entity
+	 * @param filePath
 	 * @param tracciato
-	 * @param configurazione
-	 */
+     */
 	@Override
 	public void normalizzaTimbrature(List<DTimbraturaFisicaRaw> rawInput, List<DTimbraturaFisica> timbrAcquisite,
 			List<TimbraturaFisicaRawScarto> rawScartate, DTracciatoTimbratureH tracciato, Path filePath) throws IOException {
@@ -172,10 +171,8 @@ public class TimbratureServiceImpl implements TimbratureService {
 	 * @param raw            timbratura grezza di riferimento
 	 * @param timbrAcquisite timbrature da acquisire
 	 * @param rawScartate    timbrature da scartare
-	 * @param entity         file
 	 * @param tracciato      tracciato
-	 * @param configurazione configurazione
-	 */
+     */
 	private void normalizzaTimbratura(List<DTimbraturaFisicaRaw> rawInput, DTimbraturaFisicaRaw raw,
 			List<DTimbraturaFisica> timbrAcquisite, List<TimbraturaFisicaRawScarto> rawScartate,
 			DTracciatoTimbratureH tracciato) {
@@ -200,7 +197,7 @@ public class TimbratureServiceImpl implements TimbratureService {
 	/**
 	 * metodo per l'assegnazione delle date
 	 * 
-	 * @param timbrAcquisitePostAnn timbrature acquisite
+	 * @param timbrNormalizzata timbrature acquisite
 	 * @param raw
 	 * @param tracciato
 	 */
@@ -218,7 +215,6 @@ public class TimbratureServiceImpl implements TimbratureService {
 	/**
 	 * metodo per l'assegnazione delle date
 	 * 
-	 * @param timbrAcquisitePostAnn timbrature acquisite
 	 * @param raw
 	 * @param tracciato
 	 * @throws NotRollBackException 
@@ -262,7 +258,6 @@ public class TimbratureServiceImpl implements TimbratureService {
 	 * metodo per acquisire una timbratura
 	 * 
 	 * @param timbrNormalizzata timbratura normalizzata
-	 * @param raw               timbratura grezza di riferimento
 	 * @param timbrAcquisite    timbrature acquisite
 	 */
 	private static void acquisisciTimbratura(DTimbraturaFisica timbrNormalizzata,
@@ -275,10 +270,8 @@ public class TimbratureServiceImpl implements TimbratureService {
 	 * 
 	 * @param timbrNormalizzata timbratre normalizzata
 	 * @param raw               timbratura grezza di riferimento
-	 * @param entity            file
 	 * @param tracciato         tracciato
-	 * @param configurazione    configurazione
-	 */
+     */
 	private void inserisciAssegnazioneBadge(DTimbraturaFisica timbrNormalizzata, DTimbraturaFisicaRaw raw,
 			DTracciatoTimbratureH tracciato) throws NotRollBackException {
 		/*
@@ -389,7 +382,7 @@ public class TimbratureServiceImpl implements TimbratureService {
 	/**
 	 * metodo di verifica data fine validità badge
 	 * 
-	 * @param dataInizio
+	 * @param dataFine
 	 * @param timbrNormalizzata
 	 * 
 	 */
@@ -440,7 +433,6 @@ public class TimbratureServiceImpl implements TimbratureService {
 	 * 
 	 * @param timbrNormalizzata timbratura normalizzata di riferimento
 	 * @param raw               timbratura grezza di riferimento
-	 * @param entity            file
 	 * @param tracciato
 	 */
 	private void inserisciLettoreTestinaCausale(DTimbraturaFisica timbrNormalizzata, DTimbraturaFisicaRaw raw,
@@ -484,9 +476,7 @@ public class TimbratureServiceImpl implements TimbratureService {
 	 * @param timbrNormalizzata
 	 * @param raw
 	 * @param lettore
-	 * @param entity
-	 * @param tracciato
-	 * 
+     *
 	 */
 	private void inseriscoCausale(DTimbraturaFisica timbrNormalizzata, DTimbraturaFisicaRaw raw, DLettoreBadgeFisico lettore) throws NotRollBackException {
 		// VERIFICO IL CODICE CAUSALE
@@ -504,8 +494,7 @@ public class TimbratureServiceImpl implements TimbratureService {
 	 * @param lettore
 	 * @param timbrNormalizzata
 	 * @param raw
-	 * @param entity
-	 * 
+     *
 	 */
 	private void verificoCausale(DLettoreBadgeFisico lettore, DTimbraturaFisica timbrNormalizzata, DTimbraturaFisicaRaw raw) throws NotRollBackException {
 		if(!verificaAssociabilitaCausale(lettore, raw, timbrNormalizzata)) {
@@ -574,7 +563,6 @@ public class TimbratureServiceImpl implements TimbratureService {
 	 * 
 	 * @param timbrNormalizzata
 	 * @param raw
-	 * @param entity
 	 * @param tracciato
 	 * @param lettore
 	 * 

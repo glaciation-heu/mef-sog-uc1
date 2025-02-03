@@ -1,5 +1,6 @@
 package it.mef.tm.elaboration.timb.service.impl;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -32,13 +33,19 @@ public class FolderService {
 
 	@Value("${path.metrics}")
 	private String pathMetrics;
+
+	@Value(value = "${spring.kafka.listener.topic}")
+	private String topic;
 	
 	@EventListener(ApplicationReadyEvent.class)
     public void executeTask() throws IOException {
 
     	Files.createDirectories(Paths.get(pathElaborated));
+		Files.createDirectories(Paths.get(pathElaborated, File.separator, topic));
     	Files.createDirectories(Paths.get(pathCompleted));
+		Files.createDirectories(Paths.get(pathCompleted, File.separator, topic));
     	Files.createDirectories(Paths.get(pathDiscarded));
+		Files.createDirectories(Paths.get(pathDiscarded, File.separator, topic));
     	Files.createDirectories(Paths.get(pathMetrics));
 	}
 

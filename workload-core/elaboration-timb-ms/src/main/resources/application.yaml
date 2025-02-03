@@ -54,3 +54,11 @@ management:
                   - health
                   - info
                   - metric
+
+minio:
+    enabled: ${MINIO_ENABLED:false}
+    endpoint: ${MINIO_ENDPOINT:https://glaciation-tenant.integration}
+    bucket: ${MINIO_BUCKET:uc1}
+    credentials:
+        accessKey: ${MINIO_CREDENTIALS_ACCESSKEY:hXhsTQ9lN4Jbki7Ydm7Z}
+        secretKey: ${MINIO_CREDENTIALS_ACCESSKEY:U2ZD4qygrx4EApjg3fmHfCIm6IjvxDTNgErrw9bI}

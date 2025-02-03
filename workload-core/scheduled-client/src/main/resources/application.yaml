@@ -4,7 +4,9 @@ spring:
     kafka:
         producer:
             bootstrap-servers: ${SPRING_KAFKA_PRODUCER_BOOTSTRAP-SERVERS}
-            topic: ${SPRING_KAFKA_PRODUCER_TOPIC:timbrature}
+            topic: ${SPRING_KAFKA_PRODUCER_TOPIC_DEFAULT:flusso-default}
+            topic-extra: ${SPRING_KAFKA_PRODUCER_TOPIC_EXTRA:flusso-encrypt}
+
     servlet:
         multipart:
             max-file-size: ${SPRING_SERVLET_MULTIPART_MAX-FILE-SIZE:200MB}
@@ -17,10 +19,10 @@ swagger:
     versione: 1.0.0
 
 path:
-    timbrature: ${PATH_TIMESTAMPS:C:\MEF\file\timbrature}
-    timbrature.to-be-elaborated: ${PATH_TIMESTAMPS_TO-BE-ELABORATED:C:\MEF\file\to-be-elaborated}
-    timbrature.completed: ${PATH_TIMESTAMPS_ACQUIRED:C:\MEF\file\completed}
-    timbrature.discarded: ${PATH_TIMESTAMPS_DISCARDED:C:\MEF\file\discarded}
+    timbrature: ${PATH_TIMESTAMPS:C:\Users\L.Mammucari\Documents\Sogei\GlaciationTest\timbrature}
+    timbrature.to-be-elaborated: ${PATH_TIMESTAMPS_TO-BE-ELABORATED:C:\Users\L.Mammucari\Documents\Sogei\GlaciationTest\to-be-elaborated}
+    timbrature.completed: ${PATH_TIMESTAMPS_ACQUIRED:C:\Users\L.Mammucari\Documents\Sogei\GlaciationTest\completed}
+    timbrature.discarded: ${PATH_TIMESTAMPS_DISCARDED:C:\Users\L.Mammucari\Documents\Sogei\GlaciationTest\discarded}
 
 server:
     port: 8080

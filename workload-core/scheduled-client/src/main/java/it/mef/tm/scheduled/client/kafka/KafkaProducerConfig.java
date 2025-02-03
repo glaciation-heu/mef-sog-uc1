@@ -1,6 +1,7 @@
 package it.mef.tm.scheduled.client.kafka;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -29,9 +30,12 @@ public class KafkaProducerConfig {
  
 	@Value("${spring.kafka.producer.bootstrap-servers}")
 	private String bootstrapAddress;
-	
-	@Value("${spring.kafka.producer.topic}")
-	private String topic;
+
+    @Value("${spring.kafka.producer.topic}")
+    private String topicDefault;
+
+    @Value("${spring.kafka.producer.topic-extra}")
+    private String topicExtra;
 	
 	/**
 	 * Instanza del bean producerFactory
@@ -53,14 +57,26 @@ public class KafkaProducerConfig {
     }
  
     /**
-     * Instanza del bean kafkaTemplate
+     * Instanza del bean kafkaTemplateDefault
      * @return
      */
     @Bean
-    public KafkaTemplate<String, String> kafkaTemplate() {
+    public KafkaTemplate<String, String> kafkaTemplateDefault() {
     	KafkaTemplate<String, String> kafkaTemplate = new KafkaTemplate<>(producerFactory());
     	// Setto il topic di default
-    	kafkaTemplate.setDefaultTopic(topic);
+    	kafkaTemplate.setDefaultTopic(topicDefault);
+        return kafkaTemplate;
+    }
+
+    /**
+     * Instanza del bean kafkaTemplateExtra
+     * @return
+     */
+    @Bean
+    public KafkaTemplate<String, String> kafkaTemplateExtra() {
+        KafkaTemplate<String, String> kafkaTemplate = new KafkaTemplate<>(producerFactory());
+        // Setto il topic di default
+        kafkaTemplate.setDefaultTopic(topicExtra);
         return kafkaTemplate;
     }
 }

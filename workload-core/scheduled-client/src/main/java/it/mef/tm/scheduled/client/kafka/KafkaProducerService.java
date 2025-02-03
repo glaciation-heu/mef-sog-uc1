@@ -31,17 +31,25 @@ public class KafkaProducerService {
 	private static final String ERR_KAFKA_MESSAGE_UNDELIVERABLE = "ERR_KAFKA_MESSAGE_UNDELIVERABLE";
 	
 	@Autowired(required = false)
-	private KafkaTemplate<String, String> kafkaTemplate;
+	private KafkaTemplate<String, String> kafkaTemplateDefault;
+
+	@Autowired(required = false)
+	private KafkaTemplate<String, String> kafkaTemplateExtra;
 	
-	public void publishFlussoElaborazione(ElaborazioneModel elaborazioneModel) {
+	public void publishFlussoElaborazione(ElaborazioneModel elaborazioneModel, Boolean isDefault) {
 		
 		log.info("about to send Kafka message for timbrature request: " + elaborazioneModel.getPathToFile());
 		
 		try {
 			ObjectMapper objMapper = new ObjectMapper();
 			String proc = objMapper.writeValueAsString(elaborazioneModel);
-			
-			ListenableFuture<SendResult<String, String>> future = kafkaTemplate.sendDefault(UUID.randomUUID().toString(), proc);
+
+			ListenableFuture<SendResult<String, String>> future = null;
+			if (!isDefault) {
+				future = kafkaTemplateExtra.sendDefault(UUID.randomUUID().toString(), proc);
+			} else {
+				future = kafkaTemplateDefault.sendDefault(UUID.randomUUID().toString(), proc);
+			}
 
 			SendResult<String, String> sendResult = future.get(20, TimeUnit.SECONDS);
 			String responseDeliveredStringed = sendResult.getProducerRecord() != null ? sendResult.getProducerRecord().value() : null;

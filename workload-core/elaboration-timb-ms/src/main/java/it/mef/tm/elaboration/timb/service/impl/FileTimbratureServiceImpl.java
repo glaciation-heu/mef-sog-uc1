@@ -94,11 +94,10 @@ public class FileTimbratureServiceImpl implements FileTimbratureService {
 	/**
 	 * metodo per verificare la coerenza del file timbrature
 	 * 
-	 * @param entity         file
+	 * @param filePath         file
 	 * @param tracciato      tracciato con guida
 	 * @param result
-	 * @param configurazione configurazione file
-	 * @throws NotRollBackException 
+	 * @throws NotRollBackException
 	 * @throws PreconditionException 
 	 */
 	private void verificaFile(Path filePath, DTracciatoTimbratureH tracciato, TimbraturaEsitoLettura result) throws NotRollBackException, PreconditionException, IOException {
@@ -156,11 +155,8 @@ public class FileTimbratureServiceImpl implements FileTimbratureService {
 	/**
 	 * metodo che genera l'acquisizione in errore del file
 	 * 
-	 * @param entity                   file
+	 * @param result                   file
 	 * @param errCode                  codice errore
-	 * @param message                  messaggio
-	 * @param dConfigAcquisizFileTimbr configurazione
-	 * @throws RestResponseException 
 	 * @throws ServiceException 
 	 */
 	private void acqTimbrRawErr(TimbraturaEsitoLettura result, String errCode) throws PreconditionException {
@@ -175,9 +171,8 @@ public class FileTimbratureServiceImpl implements FileTimbratureService {
 	/**
 	 * metodo per ottenere le righe da un file testuale
 	 * 
-	 * @param entity         file
-	 * @param configurazione configurazione
-	 * @throws PreconditionException 
+	 * @param pathFinale         file
+	 * @throws PreconditionException
 	 */
 	private List<String> getFileText(Path pathFinale) throws PreconditionException {
 		List<String> listaRisultati = null;
@@ -195,9 +190,8 @@ public class FileTimbratureServiceImpl implements FileTimbratureService {
 	/**
 	 * metodo per ottenere il tracciato xml da file
 	 * 
-	 * @param entity         file
-	 * @param configurazione configurazione
-	 * @throws PreconditionException 
+	 * @param pathFinale         file
+	 * @throws PreconditionException
 	 */
 	private Document getFileXml(Path pathFinale) throws PreconditionException {
 		List<String> listaRisultati = getFileText(pathFinale);
@@ -238,11 +232,9 @@ public class FileTimbratureServiceImpl implements FileTimbratureService {
 	 * metodo per verificare un file xml
 	 * @param filePath 
 	 * 
-	 * @param listaRaw       timbrature grezze
-	 * @param entity         file
+	 * @param rawTimbr       timbrature grezze
 	 * @param tracciato
-	 * @param configurazione
-	 * @throws NotRollBackException 
+	 * @throws NotRollBackException
 	 * @throws PreconditionException 
 	 */
 	private void verificaXml(Path filePath, List<DTimbraturaFisicaRaw> rawTimbr, DTraccTimbrXmlH tracciato) throws NotRollBackException, PreconditionException, IOException {
@@ -262,10 +254,8 @@ public class FileTimbratureServiceImpl implements FileTimbratureService {
 	 * 
 	 * @param listaRaw       timbrature grezze
 	 * @param node           nodo timbratura
-	 * @param entity         file
 	 * @param tracciato
-	 * @param configurazione
-	 * @throws NotRollBackException 
+	 * @throws NotRollBackException
 	 */
 	private void getSingleTimbrFromXml(List<DTimbraturaFisicaRaw> listaRaw, Node node,
 			DTraccTimbrXmlH tracciato) throws NotRollBackException {

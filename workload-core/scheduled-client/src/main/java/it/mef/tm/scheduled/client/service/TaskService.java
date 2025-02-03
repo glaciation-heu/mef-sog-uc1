@@ -8,13 +8,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Enumeration;
+import java.util.*;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipFile;
@@ -57,6 +54,12 @@ public class TaskService {
 
 	@Value("${path.timbrature.discarded}")
 	private String pathTimbratureDiscarded;
+
+	@Value("${spring.kafka.producer.topic}")
+	private String topicDefault;
+
+	@Value("${spring.kafka.producer.topic-extra}")
+	private String topicExtra;
 
 	/**
 	 * Servizio che esegue l'elaborazione massiva del task
@@ -212,14 +215,18 @@ public class TaskService {
 	 */
 	private void moveFileWithKafka(File file) throws IOException {
 		if (file.isFile()) {
-			ElaborazioneModel elabModel = new ElaborazioneModel();
+			ElaborazioneModel elabModelDefault = new ElaborazioneModel();
+			ElaborazioneModel elabModelExtra = new ElaborazioneModel();
 			// Sposto il file
 			Path move = null;
+			Path copy = null;
 			try {
 				// Sposto il file
 				move = Files.move(file.toPath(), 
-						Paths.get(StringUtility.concat(pathTimbratureToBeElaborated, File.separator, file.getName())));
-				elabModel.setPathToFile(move.toString());
+						Paths.get(StringUtility.concat(pathTimbratureToBeElaborated, File.separator, topicDefault, File.separator, file.getName())));
+				elabModelDefault.setPathToFile(move.toString());
+				copy = Files.copy(move, Paths.get(StringUtility.concat(pathTimbratureToBeElaborated, File.separator, topicExtra, File.separator, file.getName())), StandardCopyOption.REPLACE_EXISTING);
+				elabModelExtra.setPathToFile(copy.toString());
 			} catch (IOException e) {
 				log.error("Error moving file " + file.getName());
 				// Rilancio l'eccezione unchecked dato 
@@ -227,12 +234,14 @@ public class TaskService {
 				throw e;
 			}
 			try {
-				kafkaProducerService.publishFlussoElaborazione(elabModel);
+				kafkaProducerService.publishFlussoElaborazione(elabModelDefault, true);
+				kafkaProducerService.publishFlussoElaborazione(elabModelExtra, false);
 			} catch (Exception e) {
 				log.error("Error sending Kafka Message ", e);
 				// Riporto il file nella cartella originale
 				try {
 					Files.move(move, Paths.get(StringUtility.concat(file.toPath().getParent().toString(), File.separator, file.getName())));
+					Files.deleteIfExists(copy);
 				} catch (IOException e1) {
 					log.error("Error moving file " + file.getName());
 					// Rilancio l'eccezione unchecked dato 
@@ -251,28 +260,42 @@ public class TaskService {
 	 */
 	public void deleteOldFileCompleted() {
 
-		File directoryCompleted = new File(pathTimbratureCompleted);
-		File directoryDiscarded = new File(pathTimbratureDiscarded);
+		File directoryDefaultCompleted = new File(pathTimbratureCompleted+File.separator+topicDefault);
+		File directoryExtraCompleted = new File(pathTimbratureCompleted+File.separator+topicExtra);
+		File directoryDefaultDiscarded = new File(pathTimbratureDiscarded+File.separator+topicDefault);
+		File directoryExtraDiscarded = new File(pathTimbratureDiscarded+File.separator+topicDefault);
 
 		FileFilter filter = file -> {
             if (!file.isFile()) return false;
             LocalDateTime now = new LocalDateTime();
             LocalDateTime dt = new LocalDateTime(file.lastModified());
-            if (dt!=null && dt.toDateTime().isBefore(now.minusMonths(1).toDateTime()))
+            if (dt != null && dt.toDateTime().isBefore(now.minusMonths(1).toDateTime()))
                 return true;
             return false;
         };
 
-		File[] fileToDeleteCompleted = directoryCompleted.listFiles(filter);
-		File[] fileToDeleteDiscarded = directoryDiscarded.listFiles(filter);
+		File[] fileToDeleteCompletedDefault = directoryDefaultCompleted.listFiles(filter);
+		File[] fileToDeleteCompletedExtra = directoryExtraCompleted.listFiles(filter);
+		File[] fileToDeleteDiscardedDefault = directoryDefaultDiscarded.listFiles(filter);
+		File[] fileToDeleteDiscardedExtra = directoryExtraDiscarded.listFiles(filter);
 
-		if (fileToDeleteCompleted != null) {
-			for(File f: fileToDeleteCompleted) {
+		if (fileToDeleteCompletedDefault != null) {
+			for(File f: fileToDeleteCompletedDefault) {
 				f.delete();
 			}
 		}
-		if (fileToDeleteDiscarded != null) {
-			for(File f: fileToDeleteDiscarded) {
+		if (fileToDeleteCompletedExtra != null) {
+			for(File f: fileToDeleteCompletedExtra) {
+				f.delete();
+			}
+		}
+		if (fileToDeleteDiscardedDefault != null) {
+			for(File f: fileToDeleteDiscardedDefault) {
+				f.delete();
+			}
+		}
+		if (fileToDeleteDiscardedExtra != null) {
+			for(File f: fileToDeleteDiscardedExtra) {
 				f.delete();
 			}
 		}
