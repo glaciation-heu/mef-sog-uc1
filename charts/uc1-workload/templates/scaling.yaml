@@ -42,7 +42,7 @@ apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
   name: elaboration-timb-ms-scaled
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.namespace.name }}
 spec:
   scaleTargetRef:
     name: elaboration-timb-ms-deployment
@@ -70,7 +70,7 @@ apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
   name: elaboration-timb-ms-scaled-2
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.namespace.name }}
 spec:
   scaleTargetRef:
     name: elaboration-timb-ms-deployment-2

@@ -1,6 +1,7 @@
-namespace: mef-sog-uc1-wl
-labels:
-  create-ca-bundle: "true"
+namespace:
+  name: mef-sog-uc1-wl
+  labels:
+    create-ca-bundle: "true"
 
 timeZone: 'Europe/Rome'
 
