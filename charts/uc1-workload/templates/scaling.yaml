@@ -64,7 +64,7 @@ spec:
         consumerGroup: {{ .Values.kafka.consumerGroup }}
         topic: {{ .Values.kafka.topic }}
         lagThreshold: '6'
-        offsetResetPolicy: earliest
+        offsetResetPolicy: latest
 ---
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
@@ -92,4 +92,4 @@ spec:
         consumerGroup: {{ .Values.kafka.consumerGroup }}
         topic: {{ .Values.kafka.topicExtra }}
         lagThreshold: '6'
-        offsetResetPolicy: earliest
+        offsetResetPolicy: latest
