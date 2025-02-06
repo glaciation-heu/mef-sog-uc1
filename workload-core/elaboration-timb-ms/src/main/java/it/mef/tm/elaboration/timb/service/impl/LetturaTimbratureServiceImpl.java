@@ -1,7 +1,23 @@
 package it.mef.tm.elaboration.timb.service.impl;
 
-import static it.mef.tm.elaboration.timb.util.Constants.RESULT_EXTENSION;
+import io.minio.errors.*;
+import it.mef.tm.elaboration.timb.exception.NotRollBackException;
+import it.mef.tm.elaboration.timb.exception.PreconditionException;
+import it.mef.tm.elaboration.timb.model.TimbraturaEsitoLettura;
+import it.mef.tm.elaboration.timb.service.FileTimbratureService;
+import it.mef.tm.elaboration.timb.service.LetturaTimbratureService;
+import it.mef.tm.elaboration.timb.service.MinioService;
+import it.mef.tm.elaboration.timb.util.ListUtility;
+import it.mef.tm.elaboration.timb.util.StatoAcquisizioneTimbratureEnum;
+import it.mef.tm.elaboration.timb.xml.model.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,29 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-
-import io.minio.errors.*;
-import it.mef.tm.elaboration.timb.service.MinioService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import it.mef.tm.elaboration.timb.exception.NotRollBackException;
-import it.mef.tm.elaboration.timb.exception.PreconditionException;
-import it.mef.tm.elaboration.timb.model.TimbraturaEsitoLettura;
-import it.mef.tm.elaboration.timb.service.FileTimbratureService;
-import it.mef.tm.elaboration.timb.service.LetturaTimbratureService;
-import it.mef.tm.elaboration.timb.util.ListUtility;
-import it.mef.tm.elaboration.timb.util.StatoAcquisizioneTimbratureEnum;
-import it.mef.tm.elaboration.timb.xml.model.DettaglioElaborazione;
-import it.mef.tm.elaboration.timb.xml.model.ErroreEsitoTracciato;
-import it.mef.tm.elaboration.timb.xml.model.RowTimbratura;
-import it.mef.tm.elaboration.timb.xml.model.TimbraturaFisica;
-import it.mef.tm.elaboration.timb.xml.model.TimbraturaFisicaRaw;
+import static it.mef.tm.elaboration.timb.util.Constants.RESULT_EXTENSION;
 
 /**
  * LetturaTimbratureServiceImpl.java
@@ -70,9 +64,6 @@ public class LetturaTimbratureServiceImpl implements LetturaTimbratureService {
 
 	@Value(value = "${minio.enabled}")
 	private boolean minioEnabled;
-
-	@Value(value = "${minio.bucket}")
-	private String minioBucket;
 	
 	@Override
 	public void letturaFornitura(String pathToFile) throws JAXBException, IOException {
@@ -117,7 +108,7 @@ public class LetturaTimbratureServiceImpl implements LetturaTimbratureService {
 			Files.move(fileInProgress, Paths.get(pathCompleted+File.separator+topic+File.separator+fileInProgress.toFile().getName()), StandardCopyOption.REPLACE_EXISTING);
 			if (minioEnabled) {
                 try {
-                    minioService.uploadObject(minioBucket, fileInProgress.toFile().getName(), pathCompleted+File.separator+topic+File.separator+fileInProgress.toFile().getName());
+                    minioService.uploadObject(fileInProgress.toFile().getName(), pathCompleted+File.separator+topic+File.separator+fileInProgress.toFile().getName());
                 } catch (ServerException e) {
                     throw new RuntimeException(e);
                 } catch (InsufficientDataException e) {
