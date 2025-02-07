@@ -71,6 +71,15 @@ entries:
   mef-sog-uc1-wl:
   - apiVersion: v1
     appVersion: 1.0.0
+    created: "2025-02-07T14:02:47.06872351Z"
+    description: A Helm chart for UC1 Workload
+    digest: 9502e72c6798af1a132a136f69bbf06a2244a15b465758dd41bb8941856f9828
+    name: mef-sog-uc1-wl
+    urls:
+    - https://github.com/glaciation-heu/mef-sog-uc1/releases/download/mef-sog-uc1-wl-2.0.6/mef-sog-uc1-wl-2.0.6.tgz
+    version: 2.0.6
+  - apiVersion: v1
+    appVersion: 1.0.0
     created: "2025-02-06T15:50:09.90826075Z"
     description: A Helm chart for UC1 Workload
     digest: 134bc9e02ea336e443fae7d17baf0bcf3db75633898acfdf481f6029100dd094
@@ -214,4 +223,4 @@ entries:
     urls:
     - https://github.com/glaciation-heu/mef-sog-uc1/releases/download/uc1-workload-1.0.0/uc1-workload-1.0.0.tgz
     version: 1.0.0
-generated: "2025-02-06T15:50:09.908540092Z"
+generated: "2025-02-07T14:02:47.069092106Z"
