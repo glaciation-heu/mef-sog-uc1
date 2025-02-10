@@ -69,8 +69,8 @@ elaborationTimbMs:
         endpoint: https://minio.data-wrapping.svc.cluster.local
         bucket: uc1
         credentials:
-          accessKey: hXhsTQ9lN4Jbki7Ydm7Z
-          secretKey: U2ZD4qygrx4EApjg3fmHfCIm6IjvxDTNgErrw9bI
+          accessKey: minio
+          secretKey: minio123
 
 volume:
   mountPath: '/MEF/'
