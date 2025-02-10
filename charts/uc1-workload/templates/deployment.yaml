@@ -223,9 +223,10 @@ spec:
           volumeMounts:
             - name: data-mef
               mountPath: '{{ .Values.volume.mountPath }}'
-            - mountPath: /etc/ssl/certs/ca.crt
-              subPath: ca.crt
-              name: ca-bundle
+            - name: ca-bundle
+              mountPath: /usr/lib/jvm/java-1.8.0-amazon-corretto/jre/lib/security/cacerts
+              subPath: ca.jks
+              readOnly: true
       volumes:
         - name: data-mef
           persistentVolumeClaim:
