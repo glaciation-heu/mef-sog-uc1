@@ -106,27 +106,6 @@ public class LetturaTimbratureServiceImpl implements LetturaTimbratureService {
 			Files.move(fileInProgress, Paths.get(pathDiscarded+File.separator+topic+File.separator+fileInProgress.toFile().getName()), StandardCopyOption.REPLACE_EXISTING);
 		} else {
 			Files.move(fileInProgress, Paths.get(pathCompleted+File.separator+topic+File.separator+fileInProgress.toFile().getName()), StandardCopyOption.REPLACE_EXISTING);
-			if (minioEnabled) {
-                try {
-                    minioService.uploadObject(fileInProgress.toFile().getName(), pathCompleted+File.separator+topic+File.separator+fileInProgress.toFile().getName());
-                } catch (ServerException e) {
-                    throw new RuntimeException(e);
-                } catch (InsufficientDataException e) {
-                    throw new RuntimeException(e);
-                } catch (ErrorResponseException e) {
-                    throw new RuntimeException(e);
-                } catch (NoSuchAlgorithmException e) {
-                    throw new RuntimeException(e);
-                } catch (InvalidKeyException e) {
-                    throw new RuntimeException(e);
-                } catch (InvalidResponseException e) {
-                    throw new RuntimeException(e);
-                } catch (XmlParserException e) {
-                    throw new RuntimeException(e);
-                } catch (InternalException e) {
-                    throw new RuntimeException(e);
-                }
-            }
 		}
 		
 		writeElaboratedFile(fileInProgress, esito);
@@ -140,7 +119,7 @@ public class LetturaTimbratureServiceImpl implements LetturaTimbratureService {
 	 * @param esito
 	 * @throws JAXBException
 	 */
-	private void writeElaboratedFile(Path filePath, TimbraturaEsitoLettura esito) throws JAXBException {
+	private void writeElaboratedFile(Path filePath, TimbraturaEsitoLettura esito) throws JAXBException, IOException {
         DettaglioElaborazione ft = new DettaglioElaborazione(filePath.toFile().getName().replaceFirst("^[0-9]{14}-", ""));
         ft.setEsito(esito.getStatoAcquisizioneFinale().getLabelStato());
         ft.setTotalNumber(esito.getTimbrAcquisite().size() + esito.getRawScartate().size());
@@ -157,5 +136,15 @@ public class LetturaTimbratureServiceImpl implements LetturaTimbratureService {
         File file = new File(pathElaborated + File.separator + topic + File.separator
         		+ filePath.toFile().getName().substring(0, filePath.toFile().getName().lastIndexOf(".")) + RESULT_EXTENSION);
         jaxbMarshaller.marshal(ft, file);
+
+		if (minioEnabled) {
+			try {
+				minioService.uploadObject(filePath.toFile().getName(), filePath.toFile().getAbsolutePath());
+			} catch (ServerException | InsufficientDataException | ErrorResponseException |
+					 NoSuchAlgorithmException | InvalidKeyException | InvalidResponseException |
+					 XmlParserException | InternalException e) {
+				throw new RuntimeException(e);
+			}
+		}
 	}
 }
