@@ -139,7 +139,8 @@ public class LetturaTimbratureServiceImpl implements LetturaTimbratureService {
 
 		if (minioEnabled) {
 			try {
-				minioService.uploadObject(filePath.toFile().getName(), filePath.toFile().getAbsolutePath());
+				System.out.println("Uploading " + file.getName() + " to " + file.getAbsolutePath());
+				minioService.uploadObject(file.getName(), file.getAbsolutePath());
 			} catch (ServerException | InsufficientDataException | ErrorResponseException |
 					 NoSuchAlgorithmException | InvalidKeyException | InvalidResponseException |
 					 XmlParserException | InternalException e) {

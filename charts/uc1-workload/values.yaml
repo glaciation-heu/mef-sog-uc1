@@ -44,7 +44,7 @@ scheduledClient:
       ephemeralStorage: '20Mi'
 
 elaborationTimbMs:
-  image: 'ghcr.io/glaciation-heu/mef-sog-uc1/elaboration-timb-ms:2.0.1'
+  image: 'ghcr.io/glaciation-heu/mef-sog-uc1/elaboration-timb-ms:2.0.2'
   logLevelJpa: false
   h2Console: false
   metricsEnabled: false

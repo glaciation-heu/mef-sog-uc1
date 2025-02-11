@@ -50,7 +50,7 @@ public class MinioServiceImpl implements MinioService {
     }
 
     @Override
-    public void uploadObject(String objectName, String obectPath) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+    public void uploadObject(String objectName, String objectPath) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         MinioClient minioClient = minioClient();
         checkBucket(minioClient);
         if (subPathBucket != null && !subPathBucket.isEmpty()) {
@@ -60,7 +60,7 @@ public class MinioServiceImpl implements MinioService {
                 UploadObjectArgs.builder()
                         .bucket(bucket)
                         .object(objectName)
-                        .filename(obectPath)
+                        .filename(objectPath)
                         .contentType("application/xml")
                         .build());
     }
