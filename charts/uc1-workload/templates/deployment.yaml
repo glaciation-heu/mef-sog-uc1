@@ -129,17 +129,17 @@ spec:
             - name: METRICS_ENABLED
               value: '{{ .Values.elaborationTimbMs.metricsEnabled }}'
             - name: MINIO_ENABLED
-              value: '{{ .Values.elaborationTimbMs.deployment.encrypt.minio.enabled }}'
+              value: '{{ .Values.elaborationTimbMs.deployment.default.minio.enabled }}'
             - name: MINIO_ENDPOINT
               value: '{{ .Values.elaborationTimbMs.deployment.serverMinio.endpoint }}'
             - name: MINIO_BUCKET
-              value: '{{ .Values.elaborationTimbMs.deployment.encrypt.minio.bucket }}'
+              value: '{{ .Values.elaborationTimbMs.deployment.default.minio.bucket }}'
             - name: MINIO_CREDENTIALS_ACCESSKEY
               value: '{{ .Values.elaborationTimbMs.deployment.serverMinio.credentials.accessKey }}'
             - name: MINIO_CREDENTIALS_SECRETKEY
               value: '{{ .Values.elaborationTimbMs.deployment.serverMinio.credentials.secretKey }}'
             - name: MINIO_SUB_PATH_BUCKET
-              value: '{{ .Values.elaborationTimbMs.deployment.encrypt.minio.subPath }}'
+              value: '{{ .Values.elaborationTimbMs.deployment.default.minio.subPath }}'
           volumeMounts:
             - name: data-mef
               mountPath: '{{ .Values.volume.mountPath }}'
