@@ -6,10 +6,12 @@ import it.mef.tm.elaboration.timb.exception.PreconditionException;
 import it.mef.tm.elaboration.timb.model.TimbraturaEsitoLettura;
 import it.mef.tm.elaboration.timb.service.FileTimbratureService;
 import it.mef.tm.elaboration.timb.service.LetturaTimbratureService;
-import it.mef.tm.elaboration.timb.service.MinioService;
 import it.mef.tm.elaboration.timb.util.ListUtility;
 import it.mef.tm.elaboration.timb.util.StatoAcquisizioneTimbratureEnum;
 import it.mef.tm.elaboration.timb.xml.model.*;
+import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -27,7 +29,7 @@ import java.nio.file.StandardCopyOption;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static it.mef.tm.elaboration.timb.util.Constants.RESULT_EXTENSION;
@@ -48,7 +50,7 @@ public class LetturaTimbratureServiceImpl implements LetturaTimbratureService {
 	private FileTimbratureService fileTimbratureService;
 
 	@Autowired
-	private MinioService minioService;
+	private MinioServiceImpl minioService;
 	
 	@Value("${path.timbrature.elaborated}")
 	private String pathElaborated;
@@ -59,13 +61,11 @@ public class LetturaTimbratureServiceImpl implements LetturaTimbratureService {
 	@Value("${path.timbrature.discarded}")
 	private String pathDiscarded;
 
-	@Value(value = "${spring.kafka.listener.topic}")
+	@Getter
+    @Value(value = "${spring.kafka.listener.topic}")
 	private String topic;
 
-	@Value(value = "${minio.enabled}")
-	private boolean minioEnabled;
-	
-	@Override
+    @Override
 	public void letturaFornitura(String pathToFile) throws JAXBException, IOException {
 
 		Path fileInProgress = Paths.get(pathToFile);
@@ -137,10 +137,17 @@ public class LetturaTimbratureServiceImpl implements LetturaTimbratureService {
         		+ filePath.toFile().getName().substring(0, filePath.toFile().getName().lastIndexOf(".")) + RESULT_EXTENSION);
         jaxbMarshaller.marshal(ft, file);
 
-		if (minioEnabled) {
+		if (minioService.isMinioEnabled()) {
 			try {
-				System.out.println("Uploading " + file.getName() + " to " + file.getAbsolutePath());
-				minioService.uploadObject(file.getName(), file.getAbsolutePath());
+				final SimpleDateFormat day = new SimpleDateFormat("dd/MM/yyyy");
+				Map<String, String> tags = new HashMap()
+				{
+					{
+						put("topic", topic);
+						put("day", day.format(new Date()));
+					}
+				};
+				minioService.uploadObject(file.getName(), file.getAbsolutePath(), tags);
 			} catch (ServerException | InsufficientDataException | ErrorResponseException |
 					 NoSuchAlgorithmException | InvalidKeyException | InvalidResponseException |
 					 XmlParserException | InternalException e) {
@@ -148,4 +155,5 @@ public class LetturaTimbratureServiceImpl implements LetturaTimbratureService {
 			}
 		}
 	}
+
 }

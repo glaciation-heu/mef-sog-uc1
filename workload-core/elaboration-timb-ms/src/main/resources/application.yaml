@@ -59,7 +59,7 @@ minio:
     enabled: ${MINIO_ENABLED:false}
     endpoint: ${MINIO_ENDPOINT:https://glaciation-tenant.integration}
     bucket: ${MINIO_BUCKET:uc1}
-    subPathBucket: ${MINIO_SUB_PATH_BUCKET:/mef-sog/}
+    subPathBucket: ${MINIO_SUB_PATH_BUCKET:mef-sog/}
     credentials:
         accessKey: ${MINIO_CREDENTIALS_ACCESSKEY:hXhsTQ9lN4Jbki7Ydm7Z}
         secretKey: ${MINIO_CREDENTIALS_SECRETKEY:U2ZD4qygrx4EApjg3fmHfCIm6IjvxDTNgErrw9bI}

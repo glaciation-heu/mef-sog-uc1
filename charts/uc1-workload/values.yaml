@@ -44,7 +44,7 @@ scheduledClient:
       ephemeralStorage: '20Mi'
 
 elaborationTimbMs:
-  image: 'ghcr.io/glaciation-heu/mef-sog-uc1/elaboration-timb-ms:2.0.2'
+  image: 'ghcr.io/glaciation-heu/mef-sog-uc1/elaboration-timb-ms:2.0.3'
   logLevelJpa: false
   h2Console: false
   metricsEnabled: false
@@ -62,15 +62,19 @@ elaborationTimbMs:
   deployment:
     default:
       minio:
-        enabled: false
+        enabled: true
+        bucket: uc1-mef-sog-default
+        subPath: ""
     encrypt:
       minio:
         enabled: true
-        endpoint: https://minio.data-wrapping.svc.cluster.local
-        bucket: uc1
-        credentials:
-          accessKey: minio
-          secretKey: minio123
+        bucket: uc1-mef-sog-encrypt
+        subPath: ""
+    serverMinio:
+      endpoint: https://minio.data-wrapping.svc.cluster.local
+      credentials:
+        accessKey: minio
+        secretKey: minio123
 
 volume:
   mountPath: '/MEF/'

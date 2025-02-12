@@ -59,6 +59,6 @@ jobs:
       with:
         push: true
 #        tags: ${{ env.DOCKER_IMAGES }}
-        tags: "ghcr.io/glaciation-heu/mef-sog-uc1/elaboration-timb-ms:2.0.2"
+        tags: "ghcr.io/glaciation-heu/mef-sog-uc1/elaboration-timb-ms:2.0.3"
 #        labels: ${{ steps.meta.outputs.labels }}
         context: "${{ github.workspace }}/workload-core/elaboration-timb-ms"

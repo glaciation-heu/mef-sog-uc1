@@ -78,6 +78,7 @@ spec:
     metadata:
       labels:
         app: elaboration-timb-ms
+        security-ring: unhardened
     spec:
       containers:
         - name: elaboration-timb-ms
@@ -128,7 +129,17 @@ spec:
             - name: METRICS_ENABLED
               value: '{{ .Values.elaborationTimbMs.metricsEnabled }}'
             - name: MINIO_ENABLED
-              value: '{{ .Values.elaborationTimbMs.deployment.default.minio.enabled }}'
+              value: '{{ .Values.elaborationTimbMs.deployment.encrypt.minio.enabled }}'
+            - name: MINIO_ENDPOINT
+              value: '{{ .Values.elaborationTimbMs.deployment.serverMinio.endpoint }}'
+            - name: MINIO_BUCKET
+              value: '{{ .Values.elaborationTimbMs.deployment.encrypt.minio.bucket }}'
+            - name: MINIO_CREDENTIALS_ACCESSKEY
+              value: '{{ .Values.elaborationTimbMs.deployment.serverMinio.credentials.accessKey }}'
+            - name: MINIO_CREDENTIALS_SECRETKEY
+              value: '{{ .Values.elaborationTimbMs.deployment.serverMinio.credentials.secretKey }}'
+            - name: MINIO_SUB_PATH_BUCKET
+              value: '{{ .Values.elaborationTimbMs.deployment.encrypt.minio.subPath }}'
           volumeMounts:
             - name: data-mef
               mountPath: '{{ .Values.volume.mountPath }}'
@@ -161,6 +172,7 @@ spec:
     metadata:
       labels:
         app: elaboration-timb-ms
+        security-ring: hardened
     spec:
       containers:
         - name: elaboration-timb-ms
@@ -213,13 +225,15 @@ spec:
             - name: MINIO_ENABLED
               value: '{{ .Values.elaborationTimbMs.deployment.encrypt.minio.enabled }}'
             - name: MINIO_ENDPOINT
-              value: '{{ .Values.elaborationTimbMs.deployment.encrypt.minio.endpoint }}'
+              value: '{{ .Values.elaborationTimbMs.deployment.serverMinio.endpoint }}'
             - name: MINIO_BUCKET
               value: '{{ .Values.elaborationTimbMs.deployment.encrypt.minio.bucket }}'
             - name: MINIO_CREDENTIALS_ACCESSKEY
-              value: '{{ .Values.elaborationTimbMs.deployment.encrypt.minio.credentials.accessKey }}'
+              value: '{{ .Values.elaborationTimbMs.deployment.serverMinio.credentials.accessKey }}'
             - name: MINIO_CREDENTIALS_SECRETKEY
-              value: '{{ .Values.elaborationTimbMs.deployment.encrypt.minio.credentials.secretKey }}'
+              value: '{{ .Values.elaborationTimbMs.deployment.serverMinio.credentials.secretKey }}'
+            - name: MINIO_SUB_PATH_BUCKET
+              value: '{{ .Values.elaborationTimbMs.deployment.encrypt.minio.subPath }}'
           volumeMounts:
             - name: data-mef
               mountPath: '{{ .Values.volume.mountPath }}'

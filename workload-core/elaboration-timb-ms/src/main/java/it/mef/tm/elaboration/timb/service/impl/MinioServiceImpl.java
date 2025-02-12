@@ -6,14 +6,17 @@ import io.minio.MinioClient;
 import io.minio.UploadObjectArgs;
 import io.minio.errors.*;
 import it.mef.tm.elaboration.timb.service.MinioService;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 
 @Service
+@Data
 public class MinioServiceImpl implements MinioService {
 
     @Value(value = "${minio.bucket}")
@@ -28,8 +31,11 @@ public class MinioServiceImpl implements MinioService {
     @Value(value = "${minio.credentials.accessKey}")
     private String accessKey;
 
-    @Value(value = "${minio.credentials.accessKey}")
+    @Value(value = "${minio.credentials.secretKey}")
     private String secretKey;
+
+    @Value(value = "${minio.enabled}")
+    private boolean minioEnabled;
 
     @Override
     public MinioClient minioClient() {
@@ -50,16 +56,20 @@ public class MinioServiceImpl implements MinioService {
     }
 
     @Override
-    public void uploadObject(String objectName, String objectPath) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+    public void uploadObject(String objectName, String objectPath, Map<String, String> tags) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         MinioClient minioClient = minioClient();
         checkBucket(minioClient);
+        String name = objectName;
         if (subPathBucket != null && !subPathBucket.isEmpty()) {
-            objectName = subPathBucket + objectName;
+            name = subPathBucket + objectName;
         }
+
+        minioClient.traceOn(System.out);
         minioClient.uploadObject(
                 UploadObjectArgs.builder()
                         .bucket(bucket)
-                        .object(objectName)
+                        .tags(tags)
+                        .object(name)
                         .filename(objectPath)
                         .contentType("application/xml")
                         .build());
