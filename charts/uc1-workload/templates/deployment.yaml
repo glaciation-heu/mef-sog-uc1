@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: scheduled-client-deployment
+  name: scheduled-client-dpl
   namespace: {{ .Values.namespace.name }}
 spec:
   replicas: 1
@@ -67,17 +67,17 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: elaboration-timb-ms-deployment
+  name: elaboration-timb-ms-dpl-flux-default
   namespace: {{ .Values.namespace.name }}
 spec:
 #  replicas: 4
   selector:
     matchLabels:
-      app: elaboration-timb-ms
+      app: elaboration-timb-ms-flux-default
   template:
     metadata:
       labels:
-        app: elaboration-timb-ms
+        app: elaboration-timb-ms-flux-default
         security-ring: unhardened
     spec:
       containers:
@@ -161,17 +161,17 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: elaboration-timb-ms-deployment-2
+  name: elaboration-timb-ms-dpl-flux-encrypt
   namespace: {{ .Values.namespace.name }}
 spec:
   #  replicas: 4
   selector:
     matchLabels:
-      app: elaboration-timb-ms
+      app: elaboration-timb-ms-flux-encrypt
   template:
     metadata:
       labels:
-        app: elaboration-timb-ms
+        app: elaboration-timb-ms-flux-encrypt
         security-ring: hardened
     spec:
       containers:

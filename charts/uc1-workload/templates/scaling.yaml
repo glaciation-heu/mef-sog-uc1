@@ -7,7 +7,7 @@
   #  scaleTargetRef:
   #    apiVersion: apps/v1
   #    kind: Deployment
-  #    name: elaboration-timb-ms-deployment
+  #    name: elaboration-timb-ms-dpl
   #  minReplicas: 1
   #  maxReplicas: 4
   #  metrics:
@@ -41,11 +41,11 @@
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
-  name: elaboration-timb-ms-scaled
+  name: elaboration-timb-ms-scaled-flux-default
   namespace: {{ .Values.namespace.name }}
 spec:
   scaleTargetRef:
-    name: elaboration-timb-ms-deployment
+    name: elaboration-timb-ms-dpl-flux-default
   cooldownPeriod: 600
   maxReplicaCount:  4
   advanced:
@@ -69,11 +69,11 @@ spec:
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
-  name: elaboration-timb-ms-scaled-2
+  name: elaboration-timb-ms-scaled-flux-encrypt
   namespace: {{ .Values.namespace.name }}
 spec:
   scaleTargetRef:
-    name: elaboration-timb-ms-deployment-2
+    name: elaboration-timb-ms-dpl-flux-encrypt
   cooldownPeriod: 600
   maxReplicaCount:  4
   advanced:
