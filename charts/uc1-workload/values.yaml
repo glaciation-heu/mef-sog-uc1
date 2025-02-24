@@ -23,7 +23,7 @@ kafka:
 
 scheduledClient:
   kafkaEnabled: 'true'
-  image: 'ghcr.io/glaciation-heu/mef-sog-uc1/scheduled-client:2.0.0'
+  image: 'ghcr.io/glaciation-heu/mef-sog-uc1/scheduled-client:2.0.1'
   multipartMaxFileSize: '500MB'
   watchingFolderSeconds: 1
   service:
