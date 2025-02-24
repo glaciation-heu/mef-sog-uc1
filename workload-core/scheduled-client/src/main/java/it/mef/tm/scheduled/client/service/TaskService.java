@@ -61,6 +61,9 @@ public class TaskService {
 	@Value("${spring.kafka.producer.topic-extra}")
 	private String topicExtra;
 
+	@Value("${directory.clean.beforeDay}")
+	private int directoryCleanBeforeDay;
+
 	/**
 	 * Servizio che esegue l'elaborazione massiva del task
 	 * in modo schedulato. <br>
@@ -269,7 +272,7 @@ public class TaskService {
             if (!file.isFile()) return false;
             LocalDateTime now = new LocalDateTime();
             LocalDateTime dt = new LocalDateTime(file.lastModified());
-            if (dt != null && dt.toDateTime().isBefore(now.minusMonths(1).toDateTime()))
+            if (dt != null && dt.toDateTime().isBefore(now.minusDays(directoryCleanBeforeDay).toDateTime()))
                 return true;
             return false;
         };

@@ -41,3 +41,6 @@ management:
                   - info
                   - metric
                   
+directory:
+    clean:
+        beforeDay: ${DIRECTORY_CLEAN_BEFORE_DAY:2}
