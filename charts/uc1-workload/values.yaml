@@ -33,12 +33,12 @@ scheduledClient:
     nodePort: 30001
   resources:
     requests:
-      memory: '2Gi'
+      memory: '1Gi'
       cpu: '1'
       nvidiaGpu: '0'
       ephemeralStorage: '1Mi'
     limits:
-      memory: '2Gi'
+      memory: '1Gi'
       cpu: '1'
       nvidiaGpu: '0'
       ephemeralStorage: '20Mi'
@@ -50,12 +50,12 @@ elaborationTimbMs:
   metricsEnabled: false
   resources:
     requests:
-      memory: '2Gi'
+      memory: '1Gi'
       cpu: '1'
       nvidiaGpu: '0'
       ephemeralStorage: '20Mi'
     limits:
-      memory: '2Gi'
+      memory: '1Gi'
       cpu: '1'
       nvidiaGpu: '0'
       ephemeralStorage: '200Mi'
