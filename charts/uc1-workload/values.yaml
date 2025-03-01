@@ -34,7 +34,7 @@ scheduledClient:
   resources:
     requests:
       memory: '1Gi'
-      cpu: '1'
+      cpu: '500m'
       nvidiaGpu: '0'
       ephemeralStorage: '1Mi'
     limits:
@@ -51,7 +51,7 @@ elaborationTimbMs:
   resources:
     requests:
       memory: '1Gi'
-      cpu: '1'
+      cpu: '500m'
       nvidiaGpu: '0'
       ephemeralStorage: '20Mi'
     limits:
@@ -61,11 +61,15 @@ elaborationTimbMs:
       ephemeralStorage: '200Mi'
   deployment:
     default:
+      scaling:
+        maxReplicaCount: 2
       minio:
         enabled: true
         bucket: uc1-mef-sog-default
         subPath: ""
     encrypt:
+      scaling:
+        maxReplicaCount: 2
       minio:
         enabled: true
         bucket: uc1-mef-sog-encrypt

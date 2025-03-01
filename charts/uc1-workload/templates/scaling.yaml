@@ -47,7 +47,7 @@ spec:
   scaleTargetRef:
     name: elaboration-timb-ms-dpl-flux-default
   cooldownPeriod: 600
-  maxReplicaCount:  4
+  maxReplicaCount:  {{ .Values.elaborationTimbMs.deployment.default.scaling.maxReplicaCount }}
   advanced:
     horizontalPodAutoscalerConfig:
       behavior:
@@ -75,7 +75,7 @@ spec:
   scaleTargetRef:
     name: elaboration-timb-ms-dpl-flux-encrypt
   cooldownPeriod: 600
-  maxReplicaCount:  4
+  maxReplicaCount:  {{ .Values.elaborationTimbMs.deployment.encrypt.scaling.maxReplicaCount }}
   advanced:
     horizontalPodAutoscalerConfig:
       behavior:
