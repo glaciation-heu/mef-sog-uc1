@@ -33,15 +33,24 @@ scheduledClient:
     nodePort: 30001
   resources:
     requests:
-      memory: '1Gi'
-      cpu: '500m'
+      memory: '256Mi'
+      cpu: '1m'
       nvidiaGpu: '0'
       ephemeralStorage: '1Mi'
     limits:
-      memory: '1Gi'
-      cpu: '1'
+      memory: '500Mi'
+      cpu: '10m'
       nvidiaGpu: '0'
       ephemeralStorage: '20Mi'
+  annotations:
+    glaciationProjectEu:
+      resource:
+        limits:
+          energy: "0.5"
+          network: "1"
+        requests:
+          energy: "0.01"
+          network: "0.1"
 
 elaborationTimbMs:
   image: 'ghcr.io/glaciation-heu/mef-sog-uc1/elaboration-timb-ms:2.0.3'
@@ -50,12 +59,12 @@ elaborationTimbMs:
   metricsEnabled: false
   resources:
     requests:
-      memory: '1Gi'
+      memory: '500Mi'
       cpu: '500m'
       nvidiaGpu: '0'
       ephemeralStorage: '20Mi'
     limits:
-      memory: '1Gi'
+      memory: '500Mi'
       cpu: '1'
       nvidiaGpu: '0'
       ephemeralStorage: '200Mi'
@@ -79,6 +88,15 @@ elaborationTimbMs:
       credentials:
         accessKey: minio
         secretKey: minio123
+    annotations:
+      glaciationProjectEu:
+        resource:
+          limits:
+            energy: "45"
+            network: "1"
+          requests:
+            energy: "20"
+            network: "0.1"
 
 volume:
   mountPath: '/MEF/'

@@ -10,6 +10,11 @@ spec:
       app: scheduled-client
   template:
     metadata:
+      annotations:
+        glaciation-project.eu/resource/limits/energy: '{{ .Values.scheduledClient.annotations.glaciationProjectEu.resource.limits.energy }}'
+        glaciation-project.eu/resource/limits/network: '{{ .Values.scheduledClient.annotations.glaciationProjectEu.resource.limits.network }}'
+        glaciation-project.eu/resource/requests/energy: '{{ .Values.scheduledClient.annotations.glaciationProjectEu.resource.requests.energy }}'
+        glaciation-project.eu/resource/requests/network: '{{ .Values.scheduledClient.annotations.glaciationProjectEu.resource.requests.network }}'
       labels:
         app: scheduled-client
     spec:
@@ -76,6 +81,11 @@ spec:
       app: elaboration-timb-ms-flux-default
   template:
     metadata:
+      annotations:
+        glaciation-project.eu/resource/limits/energy: '{{ .Values.elaborationTimbMs.deployment.annotations.glaciationProjectEu.resource.limits.energy }}'
+        glaciation-project.eu/resource/limits/network: '{{ .Values.elaborationTimbMs.deployment.annotations.glaciationProjectEu.resource.limits.network }}'
+        glaciation-project.eu/resource/requests/energy: '{{ .Values.elaborationTimbMs.deployment.annotations.glaciationProjectEu.resource.requests.energy }}'
+        glaciation-project.eu/resource/requests/network: '{{ .Values.elaborationTimbMs.deployment.annotations.glaciationProjectEu.resource.requests.network }}'
       labels:
         app: elaboration-timb-ms-flux-default
         security-ring: unhardened
@@ -170,6 +180,11 @@ spec:
       app: elaboration-timb-ms-flux-encrypt
   template:
     metadata:
+      annotations:
+        glaciation-project.eu/resource/limits/energy: ""
+        glaciation-project.eu/resource/limits/network: ""
+        glaciation-project.eu/resource/requests/energy: ""
+        glaciation-project.eu/resource/requests/network: ""
       labels:
         app: elaboration-timb-ms-flux-encrypt
         security-ring: hardened
