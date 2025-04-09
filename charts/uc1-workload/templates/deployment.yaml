@@ -11,10 +11,10 @@ spec:
   template:
     metadata:
       annotations:
-        glaciation-project.eu/resource/limits/energy: '{{ .Values.scheduledClient.annotations.glaciationProjectEu.resource.limits.energy }}'
-        glaciation-project.eu/resource/limits/network: '{{ .Values.scheduledClient.annotations.glaciationProjectEu.resource.limits.network }}'
-        glaciation-project.eu/resource/requests/energy: '{{ .Values.scheduledClient.annotations.glaciationProjectEu.resource.requests.energy }}'
-        glaciation-project.eu/resource/requests/network: '{{ .Values.scheduledClient.annotations.glaciationProjectEu.resource.requests.network }}'
+        glaciation-project.eu/energy-capacity: '{{ .Values.scheduledClient.annotations.glaciationProjectEu.resource.capacity.energy }}'
+        glaciation-project.eu/network-capacity: '{{ .Values.scheduledClient.annotations.glaciationProjectEu.resource.capacity.network }}'
+        glaciation-project.eu/energy-allocated: '{{ .Values.scheduledClient.annotations.glaciationProjectEu.resource.allocated.energy }}'
+        glaciation-project.eu/network-allocated: '{{ .Values.scheduledClient.annotations.glaciationProjectEu.resource.allocated.network }}'
       labels:
         app: scheduled-client
     spec:
@@ -82,10 +82,10 @@ spec:
   template:
     metadata:
       annotations:
-        glaciation-project.eu/resource/limits/energy: '{{ .Values.elaborationTimbMs.deployment.annotations.glaciationProjectEu.resource.limits.energy }}'
-        glaciation-project.eu/resource/limits/network: '{{ .Values.elaborationTimbMs.deployment.annotations.glaciationProjectEu.resource.limits.network }}'
-        glaciation-project.eu/resource/requests/energy: '{{ .Values.elaborationTimbMs.deployment.annotations.glaciationProjectEu.resource.requests.energy }}'
-        glaciation-project.eu/resource/requests/network: '{{ .Values.elaborationTimbMs.deployment.annotations.glaciationProjectEu.resource.requests.network }}'
+        glaciation-project.eu/energy-capacity: '{{ .Values.elaborationTimbMs.deployment.annotations.glaciationProjectEu.resource.capacity.energy }}'
+        glaciation-project.eu/network-capacity: '{{ .Values.elaborationTimbMs.deployment.annotations.glaciationProjectEu.resource.capacity.network }}'
+        glaciation-project.eu/energy-allocated: '{{ .Values.elaborationTimbMs.deployment.annotations.glaciationProjectEu.resource.allocated.energy }}'
+        glaciation-project.eu/network-allocated: '{{ .Values.elaborationTimbMs.deployment.annotations.glaciationProjectEu.resource.allocated.network }}'
       labels:
         app: elaboration-timb-ms-flux-default
         security-ring: unhardened
@@ -181,10 +181,10 @@ spec:
   template:
     metadata:
       annotations:
-        glaciation-project.eu/resource/limits/energy: ""
-        glaciation-project.eu/resource/limits/network: ""
-        glaciation-project.eu/resource/requests/energy: ""
-        glaciation-project.eu/resource/requests/network: ""
+        glaciation-project.eu/energy-capacity: '{{ .Values.elaborationTimbMs.deployment.annotations.glaciationProjectEu.resource.capacity.energy }}'
+        glaciation-project.eu/network-capacity: '{{ .Values.elaborationTimbMs.deployment.annotations.glaciationProjectEu.resource.capacity.network }}'
+        glaciation-project.eu/energy-allocated: '{{ .Values.elaborationTimbMs.deployment.annotations.glaciationProjectEu.resource.allocated.energy }}'
+        glaciation-project.eu/network-allocated: '{{ .Values.elaborationTimbMs.deployment.annotations.glaciationProjectEu.resource.allocated.network }}'
       labels:
         app: elaboration-timb-ms-flux-encrypt
         security-ring: hardened

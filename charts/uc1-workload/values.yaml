@@ -45,10 +45,10 @@ scheduledClient:
   annotations:
     glaciationProjectEu:
       resource:
-        limits:
+        capacity:
           energy: "0.5"
           network: "1"
-        requests:
+        allocated:
           energy: "0.01"
           network: "0.1"
 
@@ -91,10 +91,10 @@ elaborationTimbMs:
     annotations:
       glaciationProjectEu:
         resource:
-          limits:
+          capacity:
             energy: "45"
             network: "1"
-          requests:
+          allocated:
             energy: "20"
             network: "0.1"
 
