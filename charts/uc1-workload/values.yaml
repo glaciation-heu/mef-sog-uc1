@@ -36,12 +36,12 @@ scheduledClient:
       memory: '256Mi'
       cpu: '1m'
       nvidiaGpu: '0'
-      ephemeralStorage: '1Mi'
+      ephemeralStorage: '20Mi'
     limits:
       memory: '500Mi'
       cpu: '10m'
       nvidiaGpu: '0'
-      ephemeralStorage: '20Mi'
+      ephemeralStorage: '100Mi'
   annotations:
     glaciationProjectEu:
       resource:
